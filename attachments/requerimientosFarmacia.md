@@ -1,206 +1,128 @@
-Farmacia con Consultorio Médico –
+# Farmacia con Consultorio Médico – Gestión de Consultas y Medicamentos Recetados
 
-Ges(cid:415)ón de Consultas y Medicamentos Recetados
+## VISTAS
 
-VISTAS
+### Vista 1: Historial Clínico Completo del Paciente
 
-Vista 1: Historial Clínico Completo del Paciente
+**Objetivo:**
+Brindar a los médicos del consultorio una vista consolidada del historial clínico de cada paciente, mostrando consultas previas, diagnósticos, tratamientos indicados, recetas emitidas y alergias conocidas. Esto elimina la pérdida de historiales en expedientes físicos, permite una atención más segura y facilita la continuidad del tratamiento entre consultas.
 
-Obje(cid:415)vo:
-Brindar a los médicos del consultorio una vista consolidada del historial clínico de cada paciente,
-mostrando  consultas  previas,  diagnós(cid:415)cos,  tratamientos  indicados,  recetas  emi(cid:415)das  y  alergias
-conocidas. Esto elimina la pérdida de historiales en expedientes (cid:304)sicos, permite una atención más
-segura y facilita la con(cid:415)nuidad del tratamiento entre consultas.
+**Información a visualizar:**
 
-Información a visualizar:
+- Datos del paciente (identificación, edad, contacto)
+- Fecha y motivo de cada consulta
+- Diagnóstico y tratamiento indicado
+- Medicamentos recetados con dosis y duración
+- Alergias y contraindicaciones registradas
+- Médico responsable de cada consulta
 
-  Datos del paciente (iden(cid:415)ﬁcación, edad, contacto)
+### Vista 2: Inventario de Medicamentos con Alertas de Stock Mínimo
 
-
+**Objetivo:**
+Permitir a la farmacia y al área de compras conocer en tiempo real el inventario disponible de cada medicamento, mostrando stock actual, stock mínimo configurado, lote, fecha de vencimiento y estado de abastecimiento. Facilita detectar desabastecimiento de fármacos clave y programar reposiciones a tiempo.
 
-Fecha y mo(cid:415)vo de cada consulta
+**Información a visualizar:**
 
-  Diagnós(cid:415)co y tratamiento indicado
+- Nombre del medicamento, presentación y concentración
+- Stock actual y stock mínimo
+- Estado (suficiente, bajo, crítico, agotado)
+- Lote y fecha de vencimiento más próxima
+- Proveedor y última fecha de reposición
+- Consumo promedio mensual
 
-  Medicamentos recetados con dosis y duración
+### Vista 3: Reporte de Medicamentos Más Recetados y Surtidos
 
-  Alergias y contraindicaciones registradas
+**Objetivo:**
+Proporcionar a la gerencia médica y comercial un resumen de los medicamentos más recetados por los médicos y más surtidos por la farmacia en un período, junto con su nivel de conversión receta–venta. Sirve para tomar decisiones de compra, detectar recetas no surtidas y evaluar la demanda real del consultorio.
 
-  Médico responsable de cada consulta
+**Información a visualizar:**
 
-Vista 2: Inventario de Medicamentos con Alertas de Stock Mínimo
+- Medicamento y principio activo
+- Cantidad de veces recetado por período
+- Cantidad de veces surtido en farmacia
+- Porcentaje de conversión receta–venta
+- Médicos que más lo recetan
+- Tendencia de consumo (creciente, estable, decreciente)
 
-Obje(cid:415)vo:
-Permi(cid:415)r a la farmacia y al área de compras conocer en (cid:415)empo real el inventario disponible de cada
-medicamento,  mostrando  stock  actual,  stock  mínimo  conﬁgurado,  lote,  fecha  de  vencimiento  y
-estado  de  abastecimiento.  Facilita  detectar  desabastecimiento  de  fármacos  clave  y  programar
-reposiciones a (cid:415)empo.
+## STORED PROCEDURES
 
-Información a visualizar:
+### SP 1: Registrar Consulta y Emitir Receta Médica
 
-  Nombre del medicamento, presentación y concentración
+**Entidad que afecta:** Consultas / Recetas / Pacientes / Médicos / Medicamentos
 
-
+**Regla de negocio que implementa:**
 
-Stock actual y stock mínimo
+Antes de registrar una consulta y emitir una receta, el procedimiento debe validar que:
 
-  Estado (suﬁciente, bajo, crí(cid:415)co, agotado)
+- El paciente exista y esté activo en el sistema.
+- El médico exista, esté activo y tenga licencia vigente.
+- Los medicamentos recetados existan en el catálogo y estén disponibles en inventario.
+- No exista interacción o contraindicación entre los medicamentos recetados y las alergias del paciente.
+- La dosis y duración del tratamiento sean válidas según el medicamento.
 
-
+Si alguna validación falla, rechaza la emisión con un mensaje explicativo. Si todo es correcto, inserta la consulta, genera la receta y descuenta del inventario los medicamentos surtidos en el momento.
 
-Lote y fecha de vencimiento más próxima
+### SP 2: Surtir Receta y Actualizar Inventario
 
-  Proveedor y úl(cid:415)ma fecha de reposición
+**Entidad que afecta:** Recetas / Inventario / Ventas / Medicamentos
 
-  Consumo promedio mensual
+**Regla de negocio que implementa:**
 
-Vista 3: Reporte de Medicamentos Más Recetados y Sur(cid:415)dos
+Al surtir una receta en la farmacia, el procedimiento debe:
 
-Obje(cid:415)vo:
-Proporcionar a la gerencia médica y comercial un resumen de los medicamentos más recetados por
-los médicos y más sur(cid:415)dos por la farmacia en un período, junto con su nivel de conversión receta–
-venta. Sirve para tomar decisiones de compra, detectar recetas  no sur(cid:415)das y evaluar la demanda
-real del consultorio.
+- Verificar que la receta exista, esté vigente y no haya sido surtida previamente.
+- Validar que haya stock suficiente de cada medicamento recetado.
+- Verificar que el lote a dispensar no esté vencido.
+- Calcular el total a pagar según precios vigentes y aplicar descuentos si corresponde.
+- Descontar del inventario los medicamentos dispensados.
+- Registrar la venta asociada a la receta y actualizar el estado de la receta a "surtida".
 
-Información a visualizar:
+Si el stock es insuficiente, el procedimiento genera una alerta de reposición y sugiere alternativas terapéuticas equivalentes.
 
-  Medicamento y principio ac(cid:415)vo
+### SP 3: Generar Orden de Reposición por Stock Mínimo
 
-  Can(cid:415)dad de veces recetado por período
+**Entidad que afecta:** Inventario / Compras / Proveedores / Medicamentos
 
-  Can(cid:415)dad de veces sur(cid:415)do en farmacia
+**Regla de negocio que implementa:**
 
-  Porcentaje de conversión receta–venta
+Permite generar automáticamente órdenes de reposición para los medicamentos cuyo stock esté por debajo del mínimo configurado. Antes de generar la orden:
 
-  Médicos que más lo recetan
+- Verifica que el medicamento esté activo en el catálogo.
+- Valida que el stock actual sea menor o igual al stock mínimo.
+- Considera el consumo promedio mensual y el tiempo de entrega del proveedor.
+- Evita duplicar órdenes de reposición pendientes para el mismo medicamento.
 
-  Tendencia de consumo (creciente, estable, decreciente)
+El procedimiento genera la orden de compra, notifica al proveedor y registra la solicitud en el sistema.
 
-STORED PROCEDURES
+## TRIGGERS
 
-SP 1: Registrar Consulta y Emi(cid:415)r Receta Médica
+### Trigger 1: BEFORE INSERT – Validación de Nueva Receta
 
-En(cid:415)dad que afecta: Consultas / Recetas / Pacientes / Médicos / Medicamentos
+**Evento que lo dispara:** Inserción en la tabla de Recetas
 
-Regla de negocio que implementa:
+**Comportamiento:**
+Antes de insertar una nueva receta, el trigger invoca al Stored Procedure de validación para verificar que:
 
-Antes de registrar una consulta y emi(cid:415)r una receta, el procedimiento debe validar que:
+- El paciente y el médico existan y estén activos.
+- Los medicamentos recetados existan en el catálogo.
+- No existan interacciones peligrosas entre los medicamentos recetados.
+- No existan contraindicaciones con las alergias registradas del paciente.
+- La dosis y duración estén dentro de los rangos permitidos.
 
-  El paciente exista y esté ac(cid:415)vo en el sistema.
+Si la validación falla, el trigger cancela la inserción y lanza un mensaje de error. Esto garantiza la seguridad del paciente y evita errores en la dispensación.
 
-  El médico exista, esté ac(cid:415)vo y tenga licencia vigente.
+### Trigger 2: AFTER UPDATE – Auditoría de Movimientos de Inventario
 
-
+**Evento que lo dispara:** Actualización en la tabla de Inventario (stock)
 
-Los medicamentos recetados existan en el catálogo y estén disponibles en inventario.
+**Comportamiento:**
+Después de que se modifica el stock de un medicamento (por surtido de receta, reposición, ajuste por vencimiento o merma), el trigger registra en una tabla de auditoría/log:
 
-  No exista interacción o contraindicación entre los medicamentos recetados y las alergias del
+- ID del medicamento y lote
+- Stock anterior y stock nuevo
+- Tipo de movimiento (surtido, reposición, ajuste, merma, vencimiento)
+- Fecha y hora del movimiento
+- Usuario o proceso que realizó la modificación
+- Receta o documento de compra asociado
 
-paciente.
-
-
-
-La dosis y duración del tratamiento sean válidas según el medicamento.
-
-Si alguna validación falla, rechaza la emisión con un mensaje explica(cid:415)vo. Si todo es correcto, inserta
-la consulta, genera la receta y descuenta del inventario los medicamentos sur(cid:415)dos en el momento.
-
-SP 2: Sur(cid:415)r Receta y Actualizar Inventario
-
-En(cid:415)dad que afecta: Recetas / Inventario / Ventas / Medicamentos
-
-Regla de negocio que implementa:
-
-Al sur(cid:415)r una receta en la farmacia, el procedimiento debe:
-
-  Veriﬁcar que la receta exista, esté vigente y no haya sido sur(cid:415)da previamente.
-
-  Validar que haya stock suﬁciente de cada medicamento recetado.
-
-  Veriﬁcar que el lote a dispensar no esté vencido.
-
-  Calcular el total a pagar según precios vigentes y aplicar descuentos si corresponde.
-
-  Descontar del inventario los medicamentos dispensados.
-
-  Registrar la venta asociada a la receta y actualizar el estado de la receta a "sur(cid:415)da".
-
-Si el stock es insuﬁciente, el procedimiento genera una alerta de reposición y sugiere alterna(cid:415)vas
-terapéu(cid:415)cas equivalentes.
-
-SP 3: Generar Orden de Reposición por Stock Mínimo
-
-En(cid:415)dad que afecta: Inventario / Compras / Proveedores / Medicamentos
-
-Regla de negocio que implementa:
-
-Permite generar automá(cid:415)camente órdenes de reposición para los medicamentos cuyo stock esté
-por debajo del mínimo conﬁgurado. Antes de generar la orden:
-
-  Veriﬁca que el medicamento esté ac(cid:415)vo en el catálogo.
-
-  Valida que el stock actual sea menor o igual al stock mínimo.
-
-  Considera el consumo promedio mensual y el (cid:415)empo de entrega del proveedor.
-
-  Evita duplicar órdenes de reposición pendientes para el mismo medicamento.
-
-El  procedimiento  genera  la  orden  de  compra,  no(cid:415)ﬁca  al  proveedor  y  registra  la  solicitud  en  el
-sistema.
-
-TRIGGERS
-
-Trigger 1: BEFORE INSERT – Validación de Nueva Receta
-
-Evento que lo dispara: Inserción en la tabla de Recetas
-
-Comportamiento:
-Antes de insertar una nueva receta, el trigger invoca al Stored Procedure de validación para veriﬁcar
-que:
-
-  El paciente y el médico existan y estén ac(cid:415)vos.
-
-
-
-Los medicamentos recetados existan en el catálogo.
-
-  No existan interacciones peligrosas entre los medicamentos recetados.
-
-  No existan contraindicaciones con las alergias registradas del paciente.
-
-
-
-La dosis y duración estén dentro de los rangos permi(cid:415)dos.
-
-Si la  validación  falla, el trigger  cancela  la inserción y  lanza  un  mensaje  de  error. Esto  garan(cid:415)za  la
-seguridad del paciente y evita errores en la dispensación.
-
-Trigger 2: AFTER UPDATE – Auditoría de Movimientos de Inventario
-
-Evento que lo dispara: Actualización en la tabla de Inventario (stock)
-
-Comportamiento:
-Después de que se modiﬁca el stock de un medicamento (por sur(cid:415)do de receta, reposición, ajuste
-por vencimiento o merma), el trigger registra en una tabla de auditoría/log:
-
-
-
-
-
-ID del medicamento y lote
-
-Stock anterior y stock nuevo
-
-  Tipo de movimiento (sur(cid:415)do, reposición, ajuste, merma, vencimiento)
-
-
-
-Fecha y hora del movimiento
-
-  Usuario o proceso que realizó la modiﬁcación
-
-  Receta o documento de compra asociado
-
-Esto permite trazabilidad completa del inventario, facilita auditorías sanitarias y ayuda a detectar
-pérdidas o errores en la dispensación.
-
+Esto permite trazabilidad completa del inventario, facilita auditorías sanitarias y ayuda a detectar pérdidas o errores en la dispensación.
