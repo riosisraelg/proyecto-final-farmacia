@@ -1,0 +1,28 @@
+# === Secretos / entorno ===
+.env
+
+# === Java ===
+*.class
+
+# === macOS ===
+.DS_Store
+
+# === LaTeX (artefactos de compilacion) ===
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.run.xml
+*.bcf
+
+# === Editor / IDE ===
+.idea/
+*.iml
