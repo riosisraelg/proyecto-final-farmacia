@@ -26,7 +26,7 @@ public class GenerarVistasHTML {
     private static final String[][] VISTAS = {
         {"Vista 1: Historial Clinico Completo del Paciente", "vista_historial_clinico_completo"},
         {"Vista 2: Inventario de Medicamentos con Alertas de Stock Minimo", "vista_inventario_medicamentos_alerta"},
-        {"Vista 3: Medicamentos Mas Recetados y Surtidos", "vista_medicamentos_mas_recetados"}
+        {"Vista 3: Medicamentos Mas Recetados y Surtidos", "vista_medicamentos_mas_recetados_simple"}
     };
 
     public static void main(String[] args) throws Exception {
@@ -42,7 +42,7 @@ public class GenerarVistasHTML {
         }
 
         String url = String.format("jdbc:mysql://%s:%s/%s?ssl-mode=%s", host, port, ESQUEMA, sslMode);
-        String salida = "site/vistas.html";
+        String salida = "docs/vistas.html";
 
         try (Connection cx = DriverManager.getConnection(url, user, password);
              Writer out = new FileWriter(salida)) {
