@@ -1,0 +1,500 @@
+// =====================================================================
+//  MODELO ER - VERSION 1 (CON tablas Alergias y Contraindicaciones)
+//  Caso: Farmacia con Consultorio Medico
+//  Sintaxis: dbdiagram.io (DBML)
+//  Adaptado para cubrir los REQUERIMIENTOS del PDF:
+//    - Vista 1: Historial Clinico Completo del Paciente
+//    - Vista 2: Inventario de Medicamentos con Alertas de Stock Minimo
+//    - Vista 3: Reporte de Medicamentos Mas Recetados y Surtidos
+//    - SP1: Registrar Consulta y Emitir Receta
+//    - SP2: Surtir Receta y Actualizar Inventario
+//    - SP3: Generar Orden de Reposicion por Stock Minimo
+//    - Trigger1: BEFORE INSERT validacion de nueva receta
+//    - Trigger2: AFTER UPDATE auditoria de movimientos de inventario
+// ---------------------------------------------------------------------
+//  CONVENCION DE IDENTIFICADORES
+//  - PK: se nombra  id_<entidad>  (ej. id_medicamento)
+//  - FK: se nombra igual que la entidad referida SIN el prefijo "id_"
+//        (ej. la FK a Medicamentos se llama  medicamento )
+//  - Valor de los id: varchar con PREFIJO de 3 letras + "-" + 6 digitos
+//        con significado por entidad. Ejemplos:
+//          Medicamentos ......... MED-000001
+//          Pacientes ............ PAC-000001
+//          Empleados ............ EMP-000001
+//          Medicos .............. MDC-000001
+//          Consultas ............ CON-000001
+//          Recetas .............. REC-000001
+//          Inventario ........... INV-000001
+//          Lotes ................ LOT-000001
+//          Proveedores .......... PRV-000001
+//          Entregas ............. ENT-000001
+//          Ventas ............... VEN-000001
+//          Ordenes de Compra .... ORD-000001
+//          Auditoria Inventario . AUD-000001
+//          Diagnosticos ......... DIA-000001
+//          Alergias ............. ALG-000001
+//          Contraindicaciones ... CTR-000001
+//          Interacciones Med. ... ITX-000001
+//          Historiales Clinicos . HCL-000001
+//  - Los ref (relaciones) se declaran EN LINEA en la columna llave.
+//  - Relaciones 1:1 marcadas con  unique  en la FK.
+//  NOTA: Medicos es una EXTENSION 1:1 de Empleados. Empleados guarda la
+//  informacion general de la persona (nombre, contacto, puesto) y
+//  Medicos solo los datos especificos del medico (cedula, especialidad).
+//  Se elimino el catalogo Cargos; el puesto queda como campo de Empleados.
+// =====================================================================
+
+
+// ---------------------- CATALOGOS / ENUMS ----------------------------
+
+Enum categoria_medicamento {
+  analgesico
+  antibiotico
+  antiinflamatorio
+  antihistaminico
+  antiviral
+  antifungico
+  cardiovascular
+  gastrointestinal
+  respiratorio
+  dermatologico
+  vitamina_suplemento
+  otro
+}
+
+Enum estado_receta {
+  emitida
+  surtida_parcial
+  surtida_total
+  vencida
+  cancelada
+}
+
+Enum via_administracion {
+  oral
+  intravenosa
+  intramuscular
+  subcutanea
+  topica
+  oftalmica
+  otica
+  nasal
+  rectal
+  inhalada
+}
+
+Enum tipo_pago {
+  efectivo
+  tarjeta_debito
+  tarjeta_credito
+  transferencia
+}
+
+// Vista 2: estado de abastecimiento del inventario
+Enum estado_abastecimiento {
+  suficiente
+  bajo
+  critico
+  agotado
+}
+
+// Trigger 2: tipo de movimiento de inventario que se audita
+Enum tipo_movimiento_inventario {
+  surtido
+  reposicion
+  ajuste
+  merma
+  vencimiento
+}
+
+// SP3: estado del ciclo de una orden de reposicion / compra
+Enum estado_orden_compra {
+  pendiente
+  enviada
+  recibida_parcial
+  recibida_total
+  cancelada
+}
+
+Enum severidad_alergia {
+  leve
+  moderada
+  severa
+}
+
+
+// ---------------------- PERSONAS -------------------------------------
+// Empleados guarda la informacion GENERAL de la persona (incluye a los
+// medicos). Medicos es una extension 1:1 con los datos especificos.
+
+Table Empleados {
+  id_empleado     varchar(10) [pk]        // PK  -> patron EMP-000001
+  nombre          varchar(50)  [not null]
+  apellidos       varchar(100) [not null]
+  puesto          varchar(60)  [not null]  // puesto/rol (medico, farmaceutico, cajero, admin...)
+  telefono        varchar(15)
+  correo          varchar(100)
+  activo          boolean      [not null, default: true]
+  fecha_ingreso   date         [not null]
+}
+
+// Datos ESPECIFICOS del medico. Extension 1:1 de Empleados (empleado unique).
+// SP1 valida que el medico exista, este activo y tenga LICENCIA VIGENTE.
+Table Medicos {
+  id_medico          varchar(10) [pk]     // PK  -> patron MDC-000001
+  empleado           varchar(10) [not null, unique, ref: - Empleados.id_empleado] // FK 1:1 -> Empleados (datos generales)
+  cedula_profesional varchar(20) [not null, unique]
+  cedula_vigencia    date         [not null]   // SP1: licencia/cedula vigente hasta esta fecha
+  especialidad       varchar(80)
+}
+
+Table Pacientes {
+  id_paciente      varchar(10) [pk]       // PK  -> patron PAC-000001
+  nombre           varchar(50)  [not null]
+  apellidos        varchar(100) [not null]
+  fecha_nacimiento date         [not null]  // Vista 1: se calcula la edad a partir de aqui
+  telefono         varchar(15)  [not null]  // Vista 1: contacto
+  correo           varchar(100)
+  direccion        varchar(150)
+  activo           boolean      [not null, default: true] // SP1: paciente activo
+  fecha_registro   datetime     [not null]
+}
+
+
+// ---------------------- HISTORIAL CLINICO ----------------------------
+// Vista 1: consolida consultas, diagnosticos, recetas y alergias.
+// Relacion 1:1 con Paciente (FK unique).
+
+Table Historiales_Clinicos {
+  id_historial     varchar(10) [pk]       // PK  -> patron HCL-000001
+  paciente         varchar(10) [not null, unique, ref: - Pacientes.id_paciente] // FK 1:1 -> Pacientes
+  antecedentes     text
+  observaciones    text
+  fecha_actualizacion datetime  [not null]
+}
+
+
+// ---------------------- CATALOGO DE ALERGIAS -------------------------
+
+Table Alergias {
+  id_alergia       varchar(10) [pk]       // PK  -> patron ALG-000001
+  nombre           varchar(100) [not null, unique]
+  descripcion      varchar(255)
+  activa           boolean      [not null, default: true]
+}
+
+// Detalle: alergias registradas en el historial clinico del paciente (Vista 1)
+Table Historial_Alergia {
+  historial        varchar(10) [not null, ref: > Historiales_Clinicos.id_historial] // FK -> Historiales_Clinicos
+  alergia          varchar(10) [not null, ref: > Alergias.id_alergia]                // FK -> Alergias
+  reaccion         varchar(150)
+  severidad        severidad_alergia   // enum controlado (leve/moderada/severa)
+  observaciones    varchar(255)
+  fecha_registro   date         [not null]
+  activa           boolean      [not null, default: true]
+
+  indexes {
+    (historial, alergia) [pk]
+  }
+}
+
+
+// ---------------------- CATALOGO DE CONTRAINDICACIONES ---------------
+
+Table Contraindicaciones {
+  id_contraindicacion varchar(10) [pk]    // PK  -> patron CTR-000001
+  nombre            varchar(100) [not null, unique]
+  descripcion       varchar(255)
+  activa            boolean      [not null, default: true]
+}
+
+// Detalle: contraindicaciones registradas en el historial del paciente
+Table Historial_Contraindicacion {
+  historial         varchar(10) [not null, ref: > Historiales_Clinicos.id_historial] // FK -> Historiales_Clinicos
+  contraindicacion  varchar(10) [not null, ref: > Contraindicaciones.id_contraindicacion] // FK -> Contraindicaciones
+  motivo            varchar(150)
+  observaciones     varchar(255)
+  fecha_registro    date         [not null]
+  activa            boolean      [not null, default: true]
+
+  indexes {
+    (historial, contraindicacion) [pk]
+  }
+}
+
+
+// ---------------------- CONSULTAS Y DIAGNOSTICOS ---------------------
+
+Table Consultas {
+  id_consulta       varchar(10) [pk]      // PK  -> patron CON-000001
+  paciente          varchar(10) [not null, ref: > Pacientes.id_paciente] // FK -> Pacientes
+  medico            varchar(10) [not null, ref: > Medicos.id_medico]      // FK -> Medicos (medico responsable, Vista 1)
+  fecha             datetime     [not null]  // Vista 1: fecha de la consulta
+  motivo            varchar(255) [not null]  // Vista 1: motivo de la consulta
+  costo_consulta    decimal(10,2) [not null]
+  tratamiento_indicado text                  // Vista 1: tratamiento indicado
+  observaciones     text
+}
+
+Table Diagnosticos {
+  id_diagnostico    varchar(10) [pk]      // PK  -> patron DIA-000001
+  nombre            varchar(100) [not null, unique]
+  descripcion       varchar(255)
+  activo            boolean      [not null, default: true]
+}
+
+Table Detalles_Consulta_Diagnostico {
+  consulta          varchar(10) [not null, ref: > Consultas.id_consulta]      // FK -> Consultas
+  diagnostico       varchar(10) [not null, ref: > Diagnosticos.id_diagnostico] // FK -> Diagnosticos
+  observaciones     varchar(255)
+
+  indexes {
+    (consulta, diagnostico) [pk]
+  }
+}
+
+
+// ---------------------- MEDICAMENTOS (tabla unificada) ---------------
+// Se elimina el catalogo cat_medicamentos y cat_tipo_med:
+// el tipo se controla con el enum categoria_medicamento.
+// NOTA: lote y fecha_vencimiento se movieron a la tabla Lotes para
+// soportar multiples lotes por medicamento (Vista 2 / SP2 / Trigger2).
+
+Table Medicamentos {
+  id_medicamento    varchar(10) [pk]      // PK  -> patron MED-000001
+  categoria_medicamento categoria_medicamento [not null] // enum controlado
+  nombre            varchar(120) [not null]
+  compuesto         varchar(120) [not null]        // principio activo (Vista 3)
+  nombre_comercial  varchar(120)
+  nombre_generico   varchar(120)
+  presentacion      varchar(80)                    // Vista 2: presentacion (caja, frasco, tableta...)
+  concentracion     varchar(60)                    // Vista 2: contenido por compuesto (ej. 500mg)
+  descripcion       varchar(255)
+  requiere_receta   boolean      [not null, default: false] // medicamento controlado
+  registro_sanitario varchar(60) [unique]
+  precio_venta      decimal(10,2) [not null, default: 0]   // SP2/Vista3: precio vigente de venta
+  activo            boolean      [not null, default: true]  // SP1/SP3: medicamento activo en catalogo
+}
+
+// Contraindicacion medicamento <-> alergia (SP1 / Trigger1):
+// permite validar que un medicamento recetado no choque con las
+// alergias registradas del paciente.
+Table Medicamento_Alergia {
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos
+  alergia           varchar(10) [not null, ref: > Alergias.id_alergia]         // FK -> Alergias
+  nivel_riesgo      severidad_alergia [not null]  // enum controlado
+  observaciones     varchar(255)
+
+  indexes {
+    (medicamento, alergia) [pk]
+  }
+}
+
+// Contraindicacion medicamento <-> condicion clinica (SP1 / Trigger1):
+// permite validar que un medicamento no este contraindicado con las
+// condiciones registradas en el historial del paciente.
+Table Medicamento_Contraindicacion {
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento]          // FK -> Medicamentos
+  contraindicacion  varchar(10) [not null, ref: > Contraindicaciones.id_contraindicacion] // FK -> Contraindicaciones
+  nivel_riesgo      severidad_alergia [not null]  // enum controlado (leve/moderada/severa)
+  observaciones     varchar(255)
+
+  indexes {
+    (medicamento, contraindicacion) [pk]
+  }
+}
+
+// Interacciones peligrosas ENTRE medicamentos (SP1 / Trigger1):
+// autorreferencia a Medicamentos. medicamento_a < medicamento_b para
+// evitar duplicar el par (A,B) y (B,A). La PK compuesta lo garantiza.
+Table Interacciones_Medicamentosas {
+  id_interaccion    varchar(10) [pk]      // PK  -> patron ITX-000001
+  medicamento_a     varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos (primer farmaco)
+  medicamento_b     varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos (segundo farmaco)
+  nivel_riesgo      severidad_alergia [not null]  // enum controlado (leve/moderada/severa)
+  efecto            varchar(255)          // efecto clinico de la interaccion
+  recomendacion     varchar(255)          // que hacer (evitar, separar tomas, monitorear...)
+  activa            boolean      [not null, default: true]
+
+  indexes {
+    (medicamento_a, medicamento_b) [unique]  // evita duplicar el par de medicamentos
+  }
+}
+
+
+// ---------------------- LOTES ----------------------------------------
+// Un medicamento tiene varios lotes; cada lote tiene su vencimiento y
+// su stock. Soporta Vista 2 (vencimiento mas proximo), SP2 (lote no
+// vencido) y Trigger2 (auditoria por medicamento+lote).
+
+Table Lotes {
+  id_lote           varchar(10) [pk]      // PK  -> patron LOT-000001
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos
+  codigo_lote       varchar(40)  [not null]
+  fecha_caducidad   date         [not null]   // Vista 2 / SP2
+  cantidad_actual   integer      [not null, default: 0]
+  activo            boolean      [not null, default: true]
+
+  indexes {
+    (medicamento, codigo_lote) [unique]
+  }
+}
+
+
+// ---------------------- RECETAS --------------------------------------
+
+Table Recetas {
+  id_receta         varchar(10) [pk]      // PK  -> patron REC-000001
+  consulta          varchar(10) [not null, ref: > Consultas.id_consulta] // FK -> Consultas
+  folio             varchar(30) [not null, unique] // folio con prefijo+numeracion+sufijo con significado (ej. RX-2026-000123-CDMX)
+  fecha_emision     datetime     [not null]
+  fecha_vencimiento date         [not null]  // SP2: receta vigente
+  estado            estado_receta [not null, default: 'emitida'] // enum controlado (SP2 cambia a surtida)
+  lugar_emision     varchar(120) [not null]
+  diagnostico_texto text                    // diagnostico segun el medico
+  indicaciones      text                    // indicaciones (no de medicamentos)
+  observaciones     text
+}
+
+Table Detalles_Receta {
+  receta            varchar(10) [not null, ref: > Recetas.id_receta]        // FK -> Recetas
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos
+  dosis             varchar(60)  [not null]   // Vista 1
+  frecuencia        varchar(60)  [not null]
+  duracion          varchar(60)  [not null]   // Vista 1
+  cantidad_prescrita integer     [not null]
+  via_administracion via_administracion [not null] // enum controlado
+  instrucciones_especificas varchar(255)
+  observaciones     varchar(255)
+
+  indexes {
+    (receta, medicamento) [pk]
+  }
+}
+
+
+// ---------------------- PROVEEDORES Y ENTREGAS -----------------------
+
+Table Proveedores {
+  id_proveedor      varchar(10) [pk]      // PK  -> patron PRV-000001
+  nombre_comercial  varchar(120) [not null]
+  telefono          varchar(15)
+  linea_medicamentos varchar(120)
+  tiempo_entrega_dias integer            // SP3: considera el tiempo de entrega
+  activo            boolean      [not null, default: true]
+}
+
+Table Entregas {
+  id_entrega        varchar(10) [pk]      // PK  -> patron ENT-000001
+  proveedor         varchar(10) [not null, ref: > Proveedores.id_proveedor] // FK -> Proveedores
+  orden_compra      varchar(10) [ref: > Ordenes_Compra.id_orden_compra]     // FK -> Ordenes_Compra (entrega que surte una orden)
+  fecha_entrega     datetime     [not null]
+  no_factura        varchar(40)  [unique]
+}
+
+Table Detalles_Entrega {
+  id_detalle_entrega varchar(12) [pk]     // PK  -> patron DEN-000001
+  entrega           varchar(10) [not null, ref: > Entregas.id_entrega]         // FK -> Entregas
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos
+  lote              varchar(10) [ref: > Lotes.id_lote]  // FK -> Lotes (lote que ingresa con la entrega)
+  cantidad_recibida integer      [not null]
+}
+
+
+// ---------------------- ORDENES DE COMPRA / REPOSICION ---------------
+// SP3: genera ordenes de reposicion cuando el stock <= stock_minimo.
+
+Table Ordenes_Compra {
+  id_orden_compra   varchar(10) [pk]      // PK  -> patron ORD-000001
+  proveedor         varchar(10) [not null, ref: > Proveedores.id_proveedor] // FK -> Proveedores
+  empleado          varchar(10) [ref: > Empleados.id_empleado] // FK -> Empleados (quien genera / null si automatica)
+  fecha_generacion  datetime     [not null]
+  fecha_estimada_entrega date
+  estado            estado_orden_compra [not null, default: 'pendiente'] // enum controlado
+  generada_automatica boolean    [not null, default: true]  // SP3 genera automaticas
+  observaciones     varchar(255)
+}
+
+Table Detalles_Orden_Compra {
+  orden_compra      varchar(10) [not null, ref: > Ordenes_Compra.id_orden_compra] // FK -> Ordenes_Compra
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento]    // FK -> Medicamentos
+  cantidad_solicitada integer   [not null]
+  costo_unitario    decimal(10,2)
+
+  indexes {
+    (orden_compra, medicamento) [pk]
+  }
+}
+
+
+// ---------------------- INVENTARIO (antes almacen_medicamentos) ------
+// Relacion 1:1 con Medicamentos. El stock por lote vive en Lotes;
+// aqui se consolida el estado global y los indicadores de la Vista 2.
+
+Table Inventario {
+  id_inventario     varchar(10) [pk]      // PK  -> patron INV-000001
+  medicamento       varchar(10) [not null, unique, ref: - Medicamentos.id_medicamento] // FK 1:1 -> Medicamentos
+  proveedor         varchar(10) [ref: > Proveedores.id_proveedor] // FK -> Proveedores (ultimo surtido, Vista 2)
+  stock_actual      integer      [not null, default: 0]   // Vista 2 / SP2 / SP3
+  stock_minimo      integer      [not null, default: 0]   // Vista 2 / SP3
+  stock_maximo      integer      [not null, default: 0]
+  punto_reorden     integer      [not null, default: 0]
+  stock_reservado   integer      [not null, default: 0]
+  stock_danado      integer      [not null, default: 0]
+  stock_transito    integer      [not null, default: 0]
+  estado_abastecimiento estado_abastecimiento [not null, default: 'suficiente'] // Vista 2: suficiente/bajo/critico/agotado
+  fecha_ultima_reposicion   date              // Vista 2
+  cantidad_ultima_reposicion integer
+  consumo_promedio_mensual   decimal(10,2)     // Vista 2 / SP3
+  dias_cobertura_estimados   integer
+  ubicacion_fisica  varchar(60)
+  costo_unitario    decimal(10,2) [not null, default: 0]
+  valor_total_existencia decimal(12,2)
+  fecha_ultimo_conteo date
+  observaciones     varchar(255)
+  activo            boolean       [not null, default: true]
+}
+
+
+// ---------------------- AUDITORIA DE INVENTARIO ----------------------
+// Trigger2 (AFTER UPDATE sobre stock): registra cada movimiento.
+
+Table Auditoria_Inventario {
+  id_auditoria      varchar(12) [pk]      // PK  -> patron AUD-000001
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos
+  lote              varchar(10) [ref: > Lotes.id_lote]  // FK -> Lotes (medicamento y lote afectado)
+  stock_anterior    integer      [not null]
+  stock_nuevo       integer      [not null]
+  tipo_movimiento   tipo_movimiento_inventario [not null] // enum: surtido/reposicion/ajuste/merma/vencimiento
+  fecha_movimiento  datetime     [not null]
+  empleado          varchar(10) [ref: > Empleados.id_empleado] // FK -> Empleados (usuario que modifico)
+  receta            varchar(10) [ref: > Recetas.id_receta]     // FK -> Recetas (documento asociado, si aplica)
+  orden_compra      varchar(10) [ref: > Ordenes_Compra.id_orden_compra] // FK -> Ordenes_Compra (documento asociado, si aplica)
+  observaciones     varchar(255)
+}
+
+
+// ---------------------- VENTAS ---------------------------------------
+// SP2: la venta queda asociada a la receta surtida.
+
+Table Ventas {
+  id_venta          varchar(10) [pk]      // PK  -> patron VEN-000001
+  empleado          varchar(10) [not null, ref: > Empleados.id_empleado] // FK -> Empleados (quien genero la venta)
+  receta            varchar(10) [ref: > Recetas.id_receta] // FK -> Recetas (venta asociada al surtido, SP2)
+  fecha_venta       datetime     [not null]
+  tipo_pago         tipo_pago    [not null] // enum controlado
+  monto_total       decimal(10,2) [not null]
+}
+
+Table Detalles_Venta {
+  venta             varchar(10) [not null, ref: > Ventas.id_venta]            // FK -> Ventas
+  medicamento       varchar(10) [not null, ref: > Medicamentos.id_medicamento] // FK -> Medicamentos
+  lote              varchar(10) [ref: > Lotes.id_lote] // FK -> Lotes (lote dispensado, SP2)
+  cantidad          integer      [not null]
+  precio_unitario   decimal(10,2) [not null]
+  subtotal          decimal(10,2) [not null]
+
+  indexes {
+    (venta, medicamento) [pk]
+  }
+}
