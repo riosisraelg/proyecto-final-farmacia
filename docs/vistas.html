@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Vistas - Farmacia con Consultorio Medico</title>
+</head>
+<body>
+<h1>Vistas de Reporte</h1>
+<p>Proyecto Final - Farmacia con Consultorio Medico.</p>
+<h2>Vista 1: Historial Clinico Completo del Paciente</h2>
+<table border="1">
+<thead>
+<tr>
+<th>id_paciente</th>
+<th>paciente</th>
+<th>edad</th>
+<th>telefono</th>
+<th>correo</th>
+<th>fecha_consulta</th>
+<th>motivo</th>
+<th>diagnostico</th>
+<th>tratamiento_indicado</th>
+<th>id_receta</th>
+<th>fecha_emision</th>
+<th>estado_receta</th>
+<th>medicamento</th>
+<th>dosis</th>
+<th>frecuencia</th>
+<th>duracion</th>
+<th>cantidad_prescrita</th>
+<th>alergias</th>
+<th>contraindicaciones</th>
+<th>medico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PAC-000001</td>
+<td>Maria Lopez Garcia</td>
+<td>36</td>
+<td>5522000001</td>
+<td>maria.lopez@mail.mx</td>
+<td>2024-06-15 09:00:00</td>
+<td>Dolor de cabeza persistente</td>
+<td>Cefalea tensional</td>
+<td>Reposo e hidratacion</td>
+<td>REC-000001</td>
+<td>2024-06-15 09:30:00</td>
+<td>surtida_total</td>
+<td>Paracetamol 500</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>5 dias</td>
+<td>15</td>
+<td>Penicilina</td>
+<td></td>
+<td>Laura Mendoza Ruiz</td>
+</tr>
+<tr>
+<td>PAC-000001</td>
+<td>Maria Lopez Garcia</td>
+<td>36</td>
+<td>5522000001</td>
+<td>maria.lopez@mail.mx</td>
+<td>2024-07-10 09:00:00</td>
+<td>Seguimiento cefalea</td>
+<td>Cefalea tensional</td>
+<td>Continuar analgesico</td>
+<td>REC-000013</td>
+<td>2024-07-10 09:30:00</td>
+<td>surtida_total</td>
+<td>Paracetamol 500</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>5 dias</td>
+<td>15</td>
+<td>Penicilina</td>
+<td></td>
+<td>Laura Mendoza Ruiz</td>
+</tr>
+<tr>
+<td>PAC-000001</td>
+<td>Maria Lopez Garcia</td>
+<td>36</td>
+<td>5522000001</td>
+<td>maria.lopez@mail.mx</td>
+<td>2024-08-12 09:00:00</td>
+<td>Control de presion</td>
+<td>Hipertension arterial</td>
+<td>Mantener antihipertensivo</td>
+<td>REC-000014</td>
+<td>2024-08-12 09:30:00</td>
+<td>surtida_total</td>
+<td>Losartan 50</td>
+<td>1 tableta</td>
+<td>Cada 24 horas</td>
+<td>30 dias</td>
+<td>30</td>
+<td>Penicilina</td>
+<td></td>
+<td>Laura Mendoza Ruiz</td>
+</tr>
+<tr>
+<td>PAC-000002</td>
+<td>Juan Perez Soto</td>
+<td>41</td>
+<td>5522000002</td>
+<td>juan.perez@mail.mx</td>
+<td>2024-06-15 10:00:00</td>
+<td>Control de diabetes</td>
+<td>Diabetes mellitus tipo 2</td>
+<td>Ajuste de metformina</td>
+<td>REC-000002</td>
+<td>2024-06-15 10:30:00</td>
+<td>surtida_total</td>
+<td>Losartan 50</td>
+<td>1 tableta</td>
+<td>Cada 24 horas</td>
+<td>30 dias</td>
+<td>30</td>
+<td>Aspirina</td>
+<td></td>
+<td>Sofia Ramirez Diaz</td>
+</tr>
+<tr>
+<td>PAC-000003</td>
+<td>Rosa Martinez Vela</td>
+<td>25</td>
+<td>5522000003</td>
+<td>rosa.martinez@mail.mx</td>
+<td>2024-06-16 11:00:00</td>
+<td>Crisis asmatica leve</td>
+<td>Asma bronquial</td>
+<td>Inhalador broncodilatador</td>
+<td>REC-000003</td>
+<td>2024-06-16 11:30:00</td>
+<td>surtida_total</td>
+<td>Salbutamol</td>
+<td>2 inhalaciones</td>
+<td>Cada 6 horas</td>
+<td>En crisis</td>
+<td>1</td>
+<td>Ibuprofeno</td>
+<td></td>
+<td>Carlos Fuentes Alba</td>
+</tr>
+<tr>
+<td>PAC-000004</td>
+<td>Pedro Sanchez Rey</td>
+<td>48</td>
+<td>5522000004</td>
+<td>pedro.sanchez@mail.mx</td>
+<td>2024-06-16 12:00:00</td>
+<td>Revision cardiaca</td>
+<td>Dislipidemia</td>
+<td>Dieta y estatina</td>
+<td>REC-000004</td>
+<td>2024-06-16 12:30:00</td>
+<td>emitida</td>
+<td>Atorvastatina 20</td>
+<td>1 tableta</td>
+<td>Cada 24 horas</td>
+<td>30 dias</td>
+<td>30</td>
+<td></td>
+<td>Insuficiencia hepatica</td>
+<td>Ana Torres Lopez</td>
+</tr>
+<tr>
+<td>PAC-000004</td>
+<td>Pedro Sanchez Rey</td>
+<td>48</td>
+<td>5522000004</td>
+<td>pedro.sanchez@mail.mx</td>
+<td>2024-08-15 12:00:00</td>
+<td>Dolor lumbar</td>
+<td>Lumbalgia</td>
+<td>Analgesico potente</td>
+<td>REC-000022</td>
+<td>2024-08-15 12:30:00</td>
+<td>emitida</td>
+<td>Ketorolaco 10</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>5 dias</td>
+<td>15</td>
+<td></td>
+<td>Insuficiencia hepatica</td>
+<td>Elena Castro Rios</td>
+</tr>
+<tr>
+<td>PAC-000004</td>
+<td>Pedro Sanchez Rey</td>
+<td>48</td>
+<td>5522000004</td>
+<td>pedro.sanchez@mail.mx</td>
+<td>2024-08-15 12:00:00</td>
+<td>Dolor lumbar</td>
+<td>Lumbalgia</td>
+<td>Analgesico potente</td>
+<td>REC-000022</td>
+<td>2024-08-15 12:30:00</td>
+<td>emitida</td>
+<td>Paracetamol 500</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>5 dias</td>
+<td>15</td>
+<td></td>
+<td>Insuficiencia hepatica</td>
+<td>Elena Castro Rios</td>
+</tr>
+<tr>
+<td>PAC-000005</td>
+<td>Lucia Gomez Nava</td>
+<td>31</td>
+<td>5522000005</td>
+<td>lucia.gomez@mail.mx</td>
+<td>2024-06-17 09:30:00</td>
+<td>Chequeo general</td>
+<td>Hipertension arterial</td>
+<td>Sin tratamiento</td>
+<td>REC-000005</td>
+<td>2024-06-17 10:00:00</td>
+<td>emitida</td>
+<td>Paracetamol 500</td>
+<td>1 tableta</td>
+<td>Cada 12 horas</td>
+<td>3 dias</td>
+<td>6</td>
+<td></td>
+<td>Embarazo</td>
+<td>Laura Mendoza Ruiz</td>
+</tr>
+<tr>
+<td>PAC-000006</td>
+<td>Andres Ruiz Cano</td>
+<td>60</td>
+<td>5522000006</td>
+<td>andres.ruiz@mail.mx</td>
+<td>2024-06-17 13:00:00</td>
+<td>Dolor estomacal</td>
+<td>Gastritis</td>
+<td>Antiacido</td>
+<td>REC-000006</td>
+<td>2024-06-17 13:30:00</td>
+<td>surtida_total</td>
+<td>Omeprazol 20</td>
+<td>1 capsula</td>
+<td>Cada 24 horas</td>
+<td>14 dias</td>
+<td>14</td>
+<td></td>
+<td>Ulcera gastrica</td>
+<td>Gabriela Vidal Soto</td>
+</tr>
+<tr>
+<td>PAC-000006</td>
+<td>Andres Ruiz Cano</td>
+<td>60</td>
+<td>5522000006</td>
+<td>andres.ruiz@mail.mx</td>
+<td>2024-07-05 13:00:00</td>
+<td>Seguimiento gastritis</td>
+<td>Gastritis</td>
+<td>Continuar omeprazol</td>
+<td>REC-000015</td>
+<td>2024-07-05 13:30:00</td>
+<td>surtida_total</td>
+<td>Omeprazol 20</td>
+<td>1 capsula</td>
+<td>Cada 24 horas</td>
+<td>14 dias</td>
+<td>14</td>
+<td></td>
+<td>Ulcera gastrica</td>
+<td>Gabriela Vidal Soto</td>
+</tr>
+<tr>
+<td>PAC-000006</td>
+<td>Andres Ruiz Cano</td>
+<td>60</td>
+<td>5522000006</td>
+<td>andres.ruiz@mail.mx</td>
+<td>2024-08-08 13:00:00</td>
+<td>Reflujo persistente</td>
+<td>Reflujo gastroesofagico</td>
+<td>Ajuste de dosis</td>
+<td>REC-000016</td>
+<td>2024-08-08 13:30:00</td>
+<td>emitida</td>
+<td>Omeprazol 20</td>
+<td>1 capsula</td>
+<td>Cada 24 horas</td>
+<td>21 dias</td>
+<td>21</td>
+<td></td>
+<td>Ulcera gastrica</td>
+<td>Gabriela Vidal Soto</td>
+</tr>
+<tr>
+<td>PAC-000007</td>
+<td>Carmen Diaz Pena</td>
+<td>16</td>
+<td>5522000007</td>
+<td>carmen.diaz@mail.mx</td>
+<td>2024-06-18 10:00:00</td>
+<td>Alergia estacional</td>
+<td>Rinitis alergica</td>
+<td>Antihistaminico</td>
+<td>REC-000007</td>
+<td>2024-06-18 10:30:00</td>
+<td>surtida_total</td>
+<td>Loratadina 10</td>
+<td>1 tableta</td>
+<td>Cada 24 horas</td>
+<td>10 dias</td>
+<td>10</td>
+<td>Mariscos</td>
+<td></td>
+<td>Carlos Fuentes Alba</td>
+</tr>
+<tr>
+<td>PAC-000008</td>
+<td>Raul Flores Mena</td>
+<td>38</td>
+<td>5522000008</td>
+<td>raul.flores@mail.mx</td>
+<td>2024-06-18 14:00:00</td>
+<td>Migrana</td>
+<td>Migrana</td>
+<td>Analgesico especifico</td>
+<td>REC-000008</td>
+<td>2024-06-18 14:30:00</td>
+<td>surtida_parcial</td>
+<td>Naproxeno 250</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>5 dias</td>
+<td>15</td>
+<td>Sulfas</td>
+<td></td>
+<td>Jorge Nunez Vega</td>
+</tr>
+<tr>
+<td>PAC-000009</td>
+<td>Diana Vargas Rios</td>
+<td>27</td>
+<td>5522000009</td>
+<td>diana.vargas@mail.mx</td>
+<td>2024-06-19 09:00:00</td>
+<td>Fatiga y anemia</td>
+<td>Anemia ferropenica</td>
+<td>Suplemento de hierro</td>
+<td>REC-000009</td>
+<td>2024-06-19 09:30:00</td>
+<td>surtida_total</td>
+<td>Sulfato ferroso</td>
+<td>1 tableta</td>
+<td>Cada 24 horas</td>
+<td>60 dias</td>
+<td>60</td>
+<td></td>
+<td>Insuficiencia renal</td>
+<td>Ricardo Gomez Pena</td>
+</tr>
+<tr>
+<td>PAC-000010</td>
+<td>Tomas Aguilar Paz</td>
+<td>54</td>
+<td>5522000010</td>
+<td>tomas.aguilar@mail.mx</td>
+<td>2024-06-19 11:30:00</td>
+<td>Dolor articular</td>
+<td>Artritis</td>
+<td>Antiinflamatorio</td>
+<td>REC-000010</td>
+<td>2024-06-19 12:00:00</td>
+<td>emitida</td>
+<td>Ibuprofeno 400</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>7 dias</td>
+<td>21</td>
+<td></td>
+<td>Anticoagulados</td>
+<td>Elena Castro Rios</td>
+</tr>
+<tr>
+<td>PAC-000011</td>
+<td>Beatriz Campos Leon</td>
+<td>23</td>
+<td>5522000011</td>
+<td>beatriz.campos@mail.mx</td>
+<td>2024-06-20 10:00:00</td>
+<td>Control ginecologico</td>
+<td>Hipertension arterial</td>
+<td>Seguimiento</td>
+<td>REC-000011</td>
+<td>2024-06-20 10:30:00</td>
+<td>emitida</td>
+<td>Paracetamol 500</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>3 dias</td>
+<td>9</td>
+<td></td>
+<td>Lactancia</td>
+<td>Patricia Salas Mora</td>
+</tr>
+<tr>
+<td>PAC-000012</td>
+<td>Oscar Reyes Solis</td>
+<td>43</td>
+<td>5522000012</td>
+<td>oscar.reyes@mail.mx</td>
+<td>2024-06-20 12:00:00</td>
+<td>Reflujo</td>
+<td>Reflujo gastroesofagico</td>
+<td>Inhibidor de bomba</td>
+<td>REC-000012</td>
+<td>2024-06-20 12:30:00</td>
+<td>surtida_total</td>
+<td>Omeprazol 20</td>
+<td>1 capsula</td>
+<td>Cada 24 horas</td>
+<td>21 dias</td>
+<td>21</td>
+<td></td>
+<td>Ulcera gastrica</td>
+<td>Gabriela Vidal Soto</td>
+</tr>
+<tr>
+<td>PAC-000013</td>
+<td>Ignacio Salgado Mora</td>
+<td>33</td>
+<td>5522000013</td>
+<td>ignacio.salgado@mail.mx</td>
+<td>2024-07-15 10:00:00</td>
+<td>Tos y fiebre</td>
+<td>Infeccion respiratoria aguda</td>
+<td>Antibiotico y mucolitico</td>
+<td>REC-000017</td>
+<td>2024-07-15 10:30:00</td>
+<td>surtida_total</td>
+<td>Ambroxol jarabe</td>
+<td>10 ml</td>
+<td>Cada 8 horas</td>
+<td>7 dias</td>
+<td>1</td>
+<td>Latex</td>
+<td></td>
+<td>Valeria Cordova Islas</td>
+</tr>
+<tr>
+<td>PAC-000013</td>
+<td>Ignacio Salgado Mora</td>
+<td>33</td>
+<td>5522000013</td>
+<td>ignacio.salgado@mail.mx</td>
+<td>2024-07-15 10:00:00</td>
+<td>Tos y fiebre</td>
+<td>Infeccion respiratoria aguda</td>
+<td>Antibiotico y mucolitico</td>
+<td>REC-000017</td>
+<td>2024-07-15 10:30:00</td>
+<td>surtida_total</td>
+<td>Ciprofloxacino 500</td>
+<td>1 tableta</td>
+<td>Cada 12 horas</td>
+<td>10 dias</td>
+<td>20</td>
+<td>Latex</td>
+<td></td>
+<td>Valeria Cordova Islas</td>
+</tr>
+<tr>
+<td>PAC-000014</td>
+<td>Fernanda Rivas Lara</td>
+<td>24</td>
+<td>5522000014</td>
+<td>fernanda.rivas@mail.mx</td>
+<td>2024-07-18 11:00:00</td>
+<td>Ojos irritados</td>
+<td>Conjuntivitis alergica</td>
+<td>Gotas antialergicas</td>
+<td>REC-000018</td>
+<td>2024-07-18 11:30:00</td>
+<td>emitida</td>
+<td>Olopatadina gotas</td>
+<td>1 gota</td>
+<td>Cada 12 horas</td>
+<td>15 dias</td>
+<td>1</td>
+<td>Aspirina</td>
+<td></td>
+<td>Rodrigo Beltran Cortez</td>
+</tr>
+<tr>
+<td>PAC-000015</td>
+<td>Hugo Mena Trejo</td>
+<td>67</td>
+<td>5522000015</td>
+<td>hugo.mena@mail.mx</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Penicilina</td>
+<td>Insuficiencia renal</td>
+<td></td>
+</tr>
+<tr>
+<td>PAC-000016</td>
+<td>Paola Guerrero Nieto</td>
+<td>29</td>
+<td>5522000016</td>
+<td>paola.guerrero@mail.mx</td>
+<td>2024-07-20 12:00:00</td>
+<td>Dolor estomacal</td>
+<td>Gastritis</td>
+<td>Omeprazol</td>
+<td>REC-000019</td>
+<td>2024-07-20 12:30:00</td>
+<td>surtida_total</td>
+<td>Omeprazol 20</td>
+<td>1 capsula</td>
+<td>Cada 24 horas</td>
+<td>14 dias</td>
+<td>14</td>
+<td></td>
+<td>Ulcera gastrica</td>
+<td>Gabriela Vidal Soto</td>
+</tr>
+<tr>
+<td>PAC-000016</td>
+<td>Paola Guerrero Nieto</td>
+<td>29</td>
+<td>5522000016</td>
+<td>paola.guerrero@mail.mx</td>
+<td>2024-07-20 12:00:00</td>
+<td>Dolor estomacal</td>
+<td>Gastritis</td>
+<td>Omeprazol</td>
+<td>REC-000019</td>
+<td>2024-07-20 12:30:00</td>
+<td>surtida_total</td>
+<td>Paracetamol 500</td>
+<td>1 tableta</td>
+<td>Cada 8 horas</td>
+<td>3 dias</td>
+<td>9</td>
+<td></td>
+<td>Ulcera gastrica</td>
+<td>Gabriela Vidal Soto</td>
+</tr>
+<tr>
+<td>PAC-000017</td>
+<td>Emilio Zamora Fuentes</td>
+<td>45</td>
+<td>5522000017</td>
+<td>emilio.zamora@mail.mx</td>
+<td>2024-08-01 10:00:00</td>
+<td>Colesterol alto</td>
+<td>Dislipidemia</td>
+<td>Estatina</td>
+<td>REC-000020</td>
+<td>2024-08-01 10:30:00</td>
+<td>vencida</td>
+<td>Atorvastatina 20</td>
+<td>1 tableta</td>
+<td>Cada 24 horas</td>
+<td>30 dias</td>
+<td>30</td>
+<td></td>
+<td>Insuficiencia hepatica</td>
+<td>Ana Torres Lopez</td>
+</tr>
+<tr>
+<td>PAC-000018</td>
+<td>Renata Cervantes Ojeda</td>
+<td>14</td>
+<td>5522000018</td>
+<td>renata.cervantes@mail.mx</td>
+<td>2024-08-05 09:30:00</td>
+<td>Crisis asmatica</td>
+<td>Asma bronquial</td>
+<td>Inhalador</td>
+<td>REC-000021</td>
+<td>2024-08-05 10:00:00</td>
+<td>surtida_total</td>
+<td>Salbutamol</td>
+<td>2 inhalaciones</td>
+<td>Cada 6 horas</td>
+<td>En crisis</td>
+<td>1</td>
+<td>Ibuprofeno</td>
+<td></td>
+<td>Rodrigo Beltran Cortez</td>
+</tr>
+</tbody>
+</table>
+<p>26 fila(s).</p>
+<hr>
+<h2>Vista 2: Inventario de Medicamentos con Alertas de Stock Minimo</h2>
+<table border="1">
+<thead>
+<tr>
+<th>nombre_medicamento</th>
+<th>presentacion</th>
+<th>concentracion</th>
+<th>stock_actual</th>
+<th>stock_minimo</th>
+<th>estado</th>
+<th>lote</th>
+<th>fecha_caducidad</th>
+<th>proveedor</th>
+<th>fecha_ultima_reposicion</th>
+<th>consumo_promedio_mensual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paracetamol 500</td>
+<td>Caja 20 tabletas</td>
+<td>500mg</td>
+<td>310</td>
+<td>50</td>
+<td>suficiente</td>
+<td>LOT-000001</td>
+<td>2026-05-31</td>
+<td>Farmaceutica Nacional</td>
+<td>2024-06-04</td>
+<td>90.00</td>
+</tr>
+<tr>
+<td>Amoxicilina 500</td>
+<td>Caja 12 capsulas</td>
+<td>500mg</td>
+<td>150</td>
+<td>60</td>
+<td>suficiente</td>
+<td>LOT-000002</td>
+<td>2025-11-30</td>
+<td>Quimica Medica</td>
+<td>2024-06-06</td>
+<td>70.00</td>
+</tr>
+<tr>
+<td>Ibuprofeno 400</td>
+<td>Caja 30 tabletas</td>
+<td>400mg</td>
+<td>200</td>
+<td>40</td>
+<td>suficiente</td>
+<td>LOT-000003</td>
+<td>2026-03-31</td>
+<td>Farmaceutica Nacional</td>
+<td>2024-06-13</td>
+<td>80.00</td>
+</tr>
+<tr>
+<td>Loratadina 10</td>
+<td>Caja 10 tabletas</td>
+<td>10mg</td>
+<td>180</td>
+<td>50</td>
+<td>suficiente</td>
+<td>LOT-000004</td>
+<td>2027-01-31</td>
+<td>MediSurte</td>
+<td>2024-06-11</td>
+<td>60.00</td>
+</tr>
+<tr>
+<td>Losartan 50</td>
+<td>Caja 30 tabletas</td>
+<td>50mg</td>
+<td>120</td>
+<td>60</td>
+<td>suficiente</td>
+<td>LOT-000005</td>
+<td>2026-08-31</td>
+<td>Distribuidora MediMax</td>
+<td>2024-06-08</td>
+<td>50.00</td>
+</tr>
+<tr>
+<td>Omeprazol 20</td>
+<td>Caja 14 capsulas</td>
+<td>20mg</td>
+<td>90</td>
+<td>80</td>
+<td>suficiente</td>
+<td>LOT-000006</td>
+<td>2025-12-31</td>
+<td>Grupo Salud Total</td>
+<td>2024-06-06</td>
+<td>85.00</td>
+</tr>
+<tr>
+<td>Salbutamol</td>
+<td>Inhalador 200 dosis</td>
+<td>100mcg</td>
+<td>60</td>
+<td>50</td>
+<td>suficiente</td>
+<td>LOT-000007</td>
+<td>2026-06-30</td>
+<td>Laboratorios Vida</td>
+<td>2024-06-09</td>
+<td>40.00</td>
+</tr>
+<tr>
+<td>Azitromicina 500</td>
+<td>Caja 3 tabletas</td>
+<td>500mg</td>
+<td>40</td>
+<td>50</td>
+<td>bajo</td>
+<td>LOT-000008</td>
+<td>2025-10-31</td>
+<td>Quimica Medica</td>
+<td>2024-06-16</td>
+<td>35.00</td>
+</tr>
+<tr>
+<td>Sulfato ferroso</td>
+<td>Caja 30 tabletas</td>
+<td>200mg</td>
+<td>220</td>
+<td>40</td>
+<td>suficiente</td>
+<td>LOT-000009</td>
+<td>2027-02-28</td>
+<td>BioPharma SA</td>
+<td>2024-06-09</td>
+<td>60.00</td>
+</tr>
+<tr>
+<td>Naproxeno 250</td>
+<td>Caja 20 tabletas</td>
+<td>250mg</td>
+<td>160</td>
+<td>40</td>
+<td>suficiente</td>
+<td>LOT-000010</td>
+<td>2026-04-30</td>
+<td>Distribuidora del Centro</td>
+<td>2024-06-12</td>
+<td>70.00</td>
+</tr>
+<tr>
+<td>Atorvastatina 20</td>
+<td>Caja 30 tabletas</td>
+<td>20mg</td>
+<td>110</td>
+<td>50</td>
+<td>suficiente</td>
+<td>LOT-000011</td>
+<td>2026-09-30</td>
+<td>Laboratorio Andino</td>
+<td>2024-06-17</td>
+<td>55.00</td>
+</tr>
+<tr>
+<td>Aciclovir 400</td>
+<td>Caja 25 tabletas</td>
+<td>400mg</td>
+<td>0</td>
+<td>30</td>
+<td>agotado</td>
+<td>LOT-000012</td>
+<td>2026-07-31</td>
+<td>Proveedora Central</td>
+<td>2024-06-14</td>
+<td>25.00</td>
+</tr>
+<tr>
+<td>Paracetamol 500</td>
+<td>Caja 20 tabletas</td>
+<td>500mg</td>
+<td>80</td>
+<td>50</td>
+<td>suficiente</td>
+<td>LOT-000013</td>
+<td>2025-02-28</td>
+<td>Farmaceutica Nacional</td>
+<td>2024-05-20</td>
+<td>90.00</td>
+</tr>
+<tr>
+<td>Amoxicilina 500</td>
+<td>Caja 12 capsulas</td>
+<td>500mg</td>
+<td>0</td>
+<td>60</td>
+<td>agotado</td>
+<td>LOT-000014</td>
+<td>2024-05-31</td>
+<td>Quimica Medica</td>
+<td>2024-01-10</td>
+<td>70.00</td>
+</tr>
+<tr>
+<td>Omeprazol 20</td>
+<td>Caja 14 capsulas</td>
+<td>20mg</td>
+<td>150</td>
+<td>80</td>
+<td>suficiente</td>
+<td>LOT-000015</td>
+<td>2026-10-31</td>
+<td>Grupo Salud Total</td>
+<td>2024-06-01</td>
+<td>85.00</td>
+</tr>
+<tr>
+<td>Ciprofloxacino 500</td>
+<td>Caja 14 tabletas</td>
+<td>500mg</td>
+<td>35</td>
+<td>40</td>
+<td>bajo</td>
+<td>LOT-000016</td>
+<td>2026-01-31</td>
+<td>Quimica Medica</td>
+<td>2024-06-05</td>
+<td>45.00</td>
+</tr>
+<tr>
+<td>Fluconazol 150</td>
+<td>Caja 1 capsula</td>
+<td>150mg</td>
+<td>60</td>
+<td>25</td>
+<td>suficiente</td>
+<td>LOT-000017</td>
+<td>2026-03-31</td>
+<td>Proveedora Central</td>
+<td>2024-06-02</td>
+<td>20.00</td>
+</tr>
+<tr>
+<td>Ambroxol jarabe</td>
+<td>Frasco 120ml</td>
+<td>15mg/5ml</td>
+<td>52</td>
+<td>50</td>
+<td>suficiente</td>
+<td>LOT-000018</td>
+<td>2026-05-31</td>
+<td>Laboratorios Vida</td>
+<td>2024-06-03</td>
+<td>70.00</td>
+</tr>
+<tr>
+<td>Olopatadina gotas</td>
+<td>Frasco 5ml</td>
+<td>0.1%</td>
+<td>18</td>
+<td>15</td>
+<td>suficiente</td>
+<td>LOT-000019</td>
+<td>2027-01-31</td>
+<td>MediSurte</td>
+<td>2024-06-04</td>
+<td>15.00</td>
+</tr>
+<tr>
+<td>Ketorolaco 10</td>
+<td>Caja 10 tabletas</td>
+<td>10mg</td>
+<td>0</td>
+<td>30</td>
+<td>agotado</td>
+<td>LOT-000020</td>
+<td>2025-09-30</td>
+<td>Distribuidora del Centro</td>
+<td>2024-06-10</td>
+<td>60.00</td>
+</tr>
+</tbody>
+</table>
+<p>20 fila(s).</p>
+<hr>
+<h2>Vista 3: Medicamentos Mas Recetados y Surtidos</h2>
+<table border="1">
+<thead>
+<tr>
+<th>id_medicamento</th>
+<th>medicamento</th>
+<th>principio_activo</th>
+<th>veces_recetado</th>
+<th>veces_surtido</th>
+<th>porcentaje_conversion</th>
+<th>medico_que_mas_receta</th>
+<th>tendencia_consumo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MED-000001</td>
+<td>Paracetamol 500</td>
+<td>Paracetamol</td>
+<td>6</td>
+<td>4</td>
+<td>66.67</td>
+<td>Laura Mendoza Ruiz</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000006</td>
+<td>Omeprazol 20</td>
+<td>Omeprazol</td>
+<td>5</td>
+<td>4</td>
+<td>80.00</td>
+<td>Gabriela Vidal Soto</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000005</td>
+<td>Losartan 50</td>
+<td>Losartan</td>
+<td>2</td>
+<td>2</td>
+<td>100.00</td>
+<td>Laura Mendoza Ruiz</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000007</td>
+<td>Salbutamol</td>
+<td>Salbutamol</td>
+<td>2</td>
+<td>2</td>
+<td>100.00</td>
+<td>Carlos Fuentes Alba</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000011</td>
+<td>Atorvastatina 20</td>
+<td>Atorvastatina</td>
+<td>2</td>
+<td>1</td>
+<td>50.00</td>
+<td>Ana Torres Lopez</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000010</td>
+<td>Naproxeno 250</td>
+<td>Naproxeno</td>
+<td>1</td>
+<td>2</td>
+<td>200.00</td>
+<td>Jorge Nunez Vega</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000016</td>
+<td>Ambroxol jarabe</td>
+<td>Ambroxol</td>
+<td>1</td>
+<td>2</td>
+<td>200.00</td>
+<td>Valeria Cordova Islas</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000013</td>
+<td>Ciprofloxacino 500</td>
+<td>Ciprofloxacino</td>
+<td>1</td>
+<td>2</td>
+<td>200.00</td>
+<td>Valeria Cordova Islas</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000003</td>
+<td>Ibuprofeno 400</td>
+<td>Ibuprofeno</td>
+<td>1</td>
+<td>1</td>
+<td>100.00</td>
+<td>Elena Castro Rios</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000004</td>
+<td>Loratadina 10</td>
+<td>Loratadina</td>
+<td>1</td>
+<td>1</td>
+<td>100.00</td>
+<td>Carlos Fuentes Alba</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000009</td>
+<td>Sulfato ferroso</td>
+<td>Hierro</td>
+<td>1</td>
+<td>1</td>
+<td>100.00</td>
+<td>Ricardo Gomez Pena</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000018</td>
+<td>Ketorolaco 10</td>
+<td>Ketorolaco</td>
+<td>1</td>
+<td>0</td>
+<td>0.00</td>
+<td>Elena Castro Rios</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000017</td>
+<td>Olopatadina gotas</td>
+<td>Olopatadina</td>
+<td>1</td>
+<td>0</td>
+<td>0.00</td>
+<td>Rodrigo Beltran Cortez</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000014</td>
+<td>Hidrocortisona crema</td>
+<td>Hidrocortisona</td>
+<td>0</td>
+<td>0</td>
+<td>0.00</td>
+<td>Sin recetas</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000015</td>
+<td>Fluconazol 150</td>
+<td>Fluconazol</td>
+<td>0</td>
+<td>0</td>
+<td>0.00</td>
+<td>Sin recetas</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000012</td>
+<td>Aciclovir 400</td>
+<td>Aciclovir</td>
+<td>0</td>
+<td>0</td>
+<td>0.00</td>
+<td>Sin recetas</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000008</td>
+<td>Azitromicina 500</td>
+<td>Azitromicina</td>
+<td>0</td>
+<td>0</td>
+<td>0.00</td>
+<td>Sin recetas</td>
+<td>estable</td>
+</tr>
+<tr>
+<td>MED-000002</td>
+<td>Amoxicilina 500</td>
+<td>Amoxicilina</td>
+<td>0</td>
+<td>0</td>
+<td>0.00</td>
+<td>Sin recetas</td>
+<td>estable</td>
+</tr>
+</tbody>
+</table>
+<p>18 fila(s).</p>
+<hr>
+</body>
+</html>
