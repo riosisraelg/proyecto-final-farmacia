@@ -1,0 +1,137 @@
+\documentclass[stu,12pt,floatsintext]{apa7}
+% =====================================================================
+%  Documento del Proyecto Final - Farmacia con Consultorio Medico
+%  Formato APA 7 (student). Las figuras son CAPTURAS DE PANTALLA del
+%  trabajo realizado; este documento NO incluye codigo fuente.
+% =====================================================================
+
+\usepackage[spanish,es-noindentfirst]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{csquotes}
+
+% --- Metadatos APA 7 (edita estos valores) ---
+\title{Farmacia con Consultorio Médico: Diseño e Implementación de una Base de Datos Relacional}
+\shorttitle{Base de Datos: Farmacia con Consultorio}
+\author{[Tu Nombre]}
+\affiliation{[Institución]}
+\course{LSTI2311: Bases de Datos}
+\professor{[Nombre del Profesor]}
+\duedate{\today}
+
+\begin{document}
+
+\maketitle
+
+% =====================================================================
+\section{Introducción}
+% =====================================================================
+El presente documento describe el diseño y la implementación de una base de
+datos relacional para la gestión de consultas médicas y medicamentos recetados
+en un consultorio con farmacia asociada. Se documenta el modelo conceptual, el
+modelo lógico, la normalización aplicada y la implementación física en MySQL,
+así como las vistas de reporte requeridas.
+
+% =====================================================================
+\section{Caso de Negocio}
+% =====================================================================
+El consultorio no cuenta con un sistema integrado para registrar consultas,
+recetas, inventario de la farmacia y ventas. La solución propuesta es una base
+de datos relacional que sirva de fundamento para un sistema de gestión, con
+control de historial clínico, inventario en tiempo real y reportes de consumo.
+
+% =====================================================================
+\section{Modelo Entidad-Relación}
+% =====================================================================
+El modelo se diseñó en dbdiagram.io y contempla 20 tablas que cubren pacientes,
+médicos, empleados, historiales clínicos, condiciones (alergias y
+contraindicaciones), consultas, diagnósticos, medicamentos, interacciones,
+recetas, proveedores, órdenes de compra, lotes, inventario, ventas y auditoría.
+
+\begin{figure}
+    \caption{Modelo entidad-relación en dbdiagram.io}
+    \centering
+    % Reemplaza por la captura del diagrama ER
+    % \includegraphics[width=\linewidth]{img/modelo_der.png}
+    \fbox{\parbox[c][6cm][c]{\linewidth}{\centering [Captura de pantalla: diagrama ER]}}
+    \label{fig:der}
+\end{figure}
+
+% =====================================================================
+\section{Modelo Lógico y Normalización}
+% =====================================================================
+Se especificaron los tipos de datos, claves primarias y foráneas de cada tabla.
+Se aplicaron las tres primeras formas normales para eliminar redundancias y
+anomalías; por ejemplo, la separación de la información general de empleados de
+los datos específicos de médicos, y el uso de tablas puente para relaciones
+muchos-a-muchos.
+
+\begin{figure}
+    \caption{Ejemplo de normalización aplicada}
+    \centering
+    % \includegraphics[width=\linewidth]{img/normalizacion.png}
+    \fbox{\parbox[c][5cm][c]{\linewidth}{\centering [Captura de pantalla: antes y después de la normalización]}}
+    \label{fig:norm}
+\end{figure}
+
+% =====================================================================
+\section{Implementación en MySQL}
+% =====================================================================
+Las tablas se crearon mediante un script DDL y se poblaron con datos de prueba
+mediante un script DML. La siguiente figura muestra las tablas creadas en el
+manejador.
+
+\begin{figure}
+    \caption{Tablas creadas en MySQL}
+    \centering
+    % \includegraphics[width=\linewidth]{img/tablas_mysql.png}
+    \fbox{\parbox[c][5cm][c]{\linewidth}{\centering [Captura de pantalla: tablas en MySQL]}}
+    \label{fig:tablas}
+\end{figure}
+
+\begin{figure}
+    \caption{Datos insertados en una tabla}
+    \centering
+    % \includegraphics[width=\linewidth]{img/datos_mysql.png}
+    \fbox{\parbox[c][5cm][c]{\linewidth}{\centering [Captura de pantalla: registros insertados]}}
+    \label{fig:datos}
+\end{figure}
+
+% =====================================================================
+\section{Vistas de Reporte}
+% =====================================================================
+Se implementaron las vistas requeridas: historial clínico completo, inventario
+con alertas de stock mínimo y medicamentos más recetados y surtidos. La
+siguiente figura muestra el resultado de la Vista 3.
+
+\begin{figure}
+    \caption{Resultado de la Vista 3: medicamentos más recetados y surtidos}
+    \centering
+    % \includegraphics[width=\linewidth]{img/vista3.png}
+    \fbox{\parbox[c][5cm][c]{\linewidth}{\centering [Captura de pantalla: Vista 3]}}
+    \label{fig:vista3}
+\end{figure}
+
+% =====================================================================
+\section{Conexión con la Aplicación}
+% =====================================================================
+Se desarrolló una aplicación Java que se conecta a la base de datos mediante
+JDBC y consulta la información. La figura muestra la ejecución exitosa.
+
+\begin{figure}
+    \caption{Ejecución de la aplicación Java (JDBC)}
+    \centering
+    % \includegraphics[width=\linewidth]{img/app_java.png}
+    \fbox{\parbox[c][5cm][c]{\linewidth}{\centering [Captura de pantalla: salida de App.java]}}
+    \label{fig:app}
+\end{figure}
+
+% =====================================================================
+\section{Conclusión}
+% =====================================================================
+El diseño e implementación de la base de datos cumple con los requerimientos del
+caso de negocio, permitiendo un control integrado de consultas, recetas,
+inventario y ventas, y sentando las bases para reportes de valor para la gestión
+del consultorio y la farmacia.
+
+\end{document}
