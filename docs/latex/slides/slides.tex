@@ -1,0 +1,129 @@
+\documentclass[11pt]{beamer}
+% =====================================================================
+%  Presentacion del Proyecto Final - Farmacia con Consultorio Medico
+%  Beamer MINIMALISTA MONOCROMATICO: fondo blanco, texto negro puro.
+%  Sin colores, sin sombras, sin matices. Las diapositivas contienen
+%  CAPTURAS DE PANTALLA del trabajo (no codigo).
+% =====================================================================
+
+% --- Tema neutro, sin adornos ---
+\usetheme{default}
+\usecolortheme{dove}      % gris/blanco neutro; se refuerza a negro abajo
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}  % sin iconos de navegacion
+\beamertemplatenavigationsymbolsempty
+
+% --- Forzar TODO a negro sobre blanco (monocromatico) ---
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{frametitle}{fg=black,bg=white}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{subtitle}{fg=black}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{institute}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{item}{fg=black}
+\setbeamercolor{itemize item}{fg=black}
+\setbeamercolor{itemize subitem}{fg=black}
+\setbeamercolor{enumerate item}{fg=black}
+\setbeamercolor{section in toc}{fg=black}
+\setbeamercolor{caption name}{fg=black}
+% Vinetas simples (guion) para evitar formas con relleno de color
+\setbeamertemplate{itemize items}{--}
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{sections/subsections in toc}[square]
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+% --- Metadatos (edita estos valores) ---
+\title{Farmacia con Consultorio Médico}
+\subtitle{Diseño e Implementación de una Base de Datos Relacional}
+\author{[Tu Nombre]}
+\institute{[Institución] \\ LSTI2311: Bases de Datos}
+\date{\today}
+
+% Caja de marcador para capturas (borde negro, sin relleno)
+\newcommand{\captura}[1]{%
+  \begin{center}
+  \fbox{\parbox[c][5.5cm][c]{0.9\linewidth}{\centering [Captura de pantalla: #1]}}
+  \end{center}}
+
+\begin{document}
+
+% --- Portada ---
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% --- Contenido ---
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+\section{Caso de Negocio}
+\begin{frame}{Caso de Negocio}
+  \begin{itemize}
+    \item Consultorio médico con farmacia asociada.
+    \item Sin sistema integrado: pérdida de historiales y errores de inventario.
+    \item Solución: base de datos relacional para consultas, recetas,
+          inventario y ventas.
+  \end{itemize}
+\end{frame}
+
+\section{Modelo Entidad-Relación}
+\begin{frame}{Modelo Entidad-Relación}
+  20 tablas: pacientes, médicos, historiales, condiciones, consultas,
+  medicamentos, recetas, inventario, ventas y auditoría.
+  \captura{diagrama ER en dbdiagram.io}
+\end{frame}
+
+\section{Modelo Lógico y Normalización}
+\begin{frame}{Modelo Lógico y Normalización}
+  \begin{itemize}
+    \item Tipos de datos, claves primarias y foráneas por tabla.
+    \item Aplicación de 1FN, 2FN y 3FN.
+  \end{itemize}
+  \captura{antes y después de la normalización}
+\end{frame}
+
+\section{Implementación en MySQL}
+\begin{frame}{Tablas creadas en MySQL}
+  \captura{tablas en MySQL}
+\end{frame}
+
+\begin{frame}{Datos insertados}
+  \captura{registros insertados}
+\end{frame}
+
+\section{Vistas de Reporte}
+\begin{frame}{Vista 3: Medicamentos más recetados y surtidos}
+  \begin{itemize}
+    \item Veces recetado y veces surtido por medicamento.
+    \item Conversión receta--venta, médico que más receta, tendencia.
+  \end{itemize}
+  \captura{resultado de la Vista 3}
+\end{frame}
+
+\section{Aplicación Java}
+\begin{frame}{Conexión JDBC}
+  \captura{salida de App.java}
+\end{frame}
+
+\section{Conclusión}
+\begin{frame}{Conclusión}
+  \begin{itemize}
+    \item Base de datos integrada que cubre el caso de negocio.
+    \item Control de historial, inventario y reportes de consumo.
+    \item Fundamento para un sistema de gestión completo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \Large Gracias
+  \end{center}
+\end{frame}
+
+\end{document}
