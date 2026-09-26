@@ -1,0 +1,115 @@
+name: Publicar sitio de vistas
+
+# Genera site/index.html desde las vistas de MySQL (Aiven) y lo publica.
+#
+# SECRETS requeridos en el repositorio (Settings > Secrets and variables > Actions):
+#   AIVEN_HOST, AIVEN_PORT, AIVEN_USERDB, AIVEN_PASSWORDDB
+#   AIVEN_SSL_MODE  (opcional, por defecto REQUIRED)
+#
+# NOTA SOBRE PAGES: publicar desde un repositorio PRIVADO requiere plan pago.
+# Mientras el repo siga privado, el job "desplegar" fallara; el artefacto
+# descargable del job "construir" funciona igual y sirve como entrega.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'web/**'
+      - '.github/workflows/publicar-sitio.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'   # lunes 06:00 UTC
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construir:
+    name: Compilar, generar y verificar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener el codigo
+        uses: actions/checkout@v4
+
+      - name: Preparar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Compilar el generador
+        run: |
+          set -euo pipefail
+          javac -encoding UTF-8 -cp "src/lib/mysql-connector-j-26.7.0.jar" \
+                -d build src/GenerarSitio.java
+
+      - name: Generar el sitio
+        env:
+          AIVEN_HOST: ${{ secrets.AIVEN_HOST }}
+          AIVEN_PORT: ${{ secrets.AIVEN_PORT }}
+          AIVEN_USERDB: ${{ secrets.AIVEN_USERDB }}
+          AIVEN_PASSWORDDB: ${{ secrets.AIVEN_PASSWORDDB }}
+          AIVEN_SSL_MODE: ${{ secrets.AIVEN_SSL_MODE }}
+        run: |
+          set -euo pipefail
+          java -cp "build:src/lib/mysql-connector-j-26.7.0.jar" GenerarSitio
+
+      - name: Verificar el documento generado
+        run: |
+          set -euo pipefail
+          test -s site/index.html || { echo "El archivo esta vacio o no existe"; exit 1; }
+
+          secciones=$(grep -c '<section' site/index.html)
+          if [ "$secciones" -ne 3 ]; then
+            echo "Se esperaban 3 secciones y hay $secciones"; exit 1
+          fi
+
+          if grep -q '{{' site/index.html; then
+            echo "Quedaron marcadores sin resolver"; exit 1
+          fi
+
+          if grep -qE 'https?://|@import|<link' site/index.html; then
+            echo "El documento referencia recursos externos"; exit 1
+          fi
+
+          for ancla in historial inventario recetados; do
+            grep -q "id=\"$ancla\"" site/index.html || { echo "Falta la seccion $ancla"; exit 1; }
+          done
+
+          filas=$(grep -c '<tr>' site/index.html)
+          if [ "$filas" -lt 20 ]; then
+            echo "Muy pocas filas de datos: $filas"; exit 1
+          fi
+
+          echo "Verificacion correcta: $secciones secciones, $filas filas."
+
+      - name: Publicar artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitio-vistas
+          path: site/
+          retention-days: 30
+
+      - name: Preparar artefacto de Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  desplegar:
+    name: Desplegar en GitHub Pages
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - name: Desplegar
+        id: despliegue
+        uses: actions/deploy-pages@v4
