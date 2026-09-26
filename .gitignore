@@ -1,8 +1,14 @@
 # === Secretos / entorno ===
 .env
+ca.pem
+truststore.p12
 
 # === Java ===
 *.class
+
+# === Salida de compilacion (generada, no versionada) ===
+site/
+build/
 
 # === macOS ===
 .DS_Store
