@@ -24,15 +24,18 @@ public class GenerarSitio {
 
     static final String ESQUEMA = "proyecto_final_data_base";
 
-    /** id de seccion, titulo, vista SQL, ORDER BY, columna de estado. */
-    record Vista(String id, String titulo, String sql, String orden, String colEstado) {}
+    /** id de seccion, etiqueta corta del navbar, titulo, vista SQL, ORDER BY, columna de estado. */
+    record Vista(String id, String corto, String titulo, String sql, String orden, String colEstado) {}
 
     static final List<Vista> VISTAS = List.of(
-        new Vista("historial", "Vista 1 &middot; Historial cl\u00ednico completo",
+        new Vista("historial", "Historial cl\u00ednico",
+                  "Vista 1 &middot; Historial cl\u00ednico completo del paciente",
                   "vista_historial_clinico_completo", "ORDER BY id_paciente, fecha_consulta", ""),
-        new Vista("inventario", "Vista 2 &middot; Inventario con alertas de stock",
+        new Vista("inventario", "Inventario",
+                  "Vista 2 &middot; Inventario con alertas de stock m\u00ednimo",
                   "vista_inventario_medicamentos_alerta", "ORDER BY stock_actual", "estado_stock"),
-        new Vista("recetados", "Vista 3 &middot; Medicamentos m\u00e1s recetados y surtidos",
+        new Vista("recetados", "M\u00e1s recetados",
+                  "Vista 3 &middot; Medicamentos m\u00e1s recetados y surtidos",
                   "vista_medicamentos_recetados_surtidos", "", "")
     );
 
@@ -53,9 +56,11 @@ public class GenerarSitio {
 
         try (Connection cx = DriverManager.getConnection(url, user, pass)) {
             cx.setReadOnly(true);
-            for (Vista v : VISTAS) {
+            for (int i = 0; i < VISTAS.size(); i++) {
+                Vista v = VISTAS.get(i);
                 nav.append("<a href=\"#").append(v.id()).append("\">")
-                   .append(v.titulo()).append("</a>\n");
+                   .append("<span class=\"nav-num\">").append(i + 1).append("</span>")
+                   .append(v.corto()).append("</a>\n");
                 try (Statement st = cx.createStatement();
                      ResultSet rs = st.executeQuery("SELECT * FROM " + v.sql() + " " + v.orden())) {
                     secciones.append(seccion(v, rs));
@@ -212,11 +217,17 @@ public class GenerarSitio {
             .sub{margin:0 0 1rem;color:var(--tinta2);font-size:.9rem}
             nav{display:flex;flex-wrap:wrap;gap:.5rem}
             nav a{
-              color:var(--tinta);text-decoration:none;font-size:.82rem;
-              padding:.45rem .8rem;border:1px solid var(--borde);border-radius:999px;
+              display:inline-flex;align-items:center;gap:.45rem;
+              color:var(--tinta);text-decoration:none;font-size:.84rem;
+              padding:.45rem .9rem .45rem .5rem;border:1px solid var(--borde);border-radius:999px;
               background:rgba(255,255,255,.05);transition:background .15s,border-color .15s;
             }
-            nav a:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4)}
+            nav a:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45)}
+            .nav-num{
+              display:inline-grid;place-items:center;width:1.35rem;height:1.35rem;
+              border-radius:50%%;background:#fff;color:#000;
+              font-size:.7rem;font-weight:700;flex:0 0 auto;
+            }
             /* --- secciones --- */
             .seccion{padding:1.5rem 1.75rem;margin-bottom:1.5rem}
             h2{margin:0 0 .9rem;font-size:1.1rem;font-weight:600;letter-spacing:-.01em}
