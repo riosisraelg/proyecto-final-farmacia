@@ -32,3 +32,9 @@ build/
 # === Editor / IDE ===
 .idea/
 *.iml
+.kiro/
+
+# === Python (entorno virtual local) ===
+.venv/
+__pycache__/
+*.pyc
