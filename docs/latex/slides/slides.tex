@@ -1,19 +1,27 @@
 \documentclass[aspectratio=169,11pt]{beamer}
 % =====================================================================
-%  Presentacion Tecnica del Proyecto Final - Farmacia con Consultorio Medico
+%  Presentacion del Proyecto Final - Farmacia con Consultorio Medico
 %
 %  Estilo MINIMALISTA MONOCROMATICO: texto NEGRO sobre fondo BLANCO.
 %  Unico elemento de marca: el LOGO de Tecmilenio SOLO en la portada.
 %
-%  ALINEACION:
-%   - Secciones = las que dicta "Presentacion del Proyecto Final.md"
-%     (Exposicion oral: empresa, problematica, impacto, estrategia,
-%      como ayuda la BD, beneficios, importancia de...).
-%   - Contenido orientado a la RUBRICA evaluable (100 pts):
-%       1) Claridad del objetivo (SMART)        -> diapositiva "Objetivo del proyecto"
-%       2) Investigacion y analisis             -> problematica/impacto/estrategia fundamentados
-%       3) Desarrollo y estructura              -> secuencia logica de secciones
-%       4) Presentacion y comunicacion          -> diseno limpio + diagrama a pantalla completa
+%  OUTLINE (15 diapositivas) definido por el alumno, alineado al
+%  documento "Presentacion del Proyecto Final" y a la rubrica (100 pts):
+%   1  Portada
+%   2  Que empresa representamos
+%   3  Problematica actual
+%   4  Impacto
+%   5  Causa raiz
+%   6  Estrategia a seguir
+%   7  Solucion tecnologica (ER a pantalla completa)
+%   8  Como se gestionan los datos
+%   9  Como automatizamos los procesos
+%   10 Como aplicamos las reglas de negocio
+%   11 Como controlamos el inventario
+%   12 Como integramos operacion y tecnologia
+%   13 Importancia de una estrategia integral
+%   14 Beneficios
+%   15 Conclusion
 %
 %  Compilar:  latexmk -pdf slides.tex
 % =====================================================================
@@ -42,6 +50,7 @@
 \setbeamercolor{block title}{fg=black,bg=white}
 \setbeamercolor{block body}{fg=black,bg=white}
 \setbeamertemplate{itemize items}{--}
+\setbeamertemplate{itemize subitem}{\textbullet}
 \setbeamertemplate{enumerate items}[default]
 \setbeamertemplate{sections/subsections in toc}[square]
 
@@ -52,130 +61,161 @@
 \usepackage{tikz}
 
 \title{Farmacia con Consultorio Médico}
-\subtitle{Presentación Técnica del Proyecto Final — Base de Datos Relacional}
-\author{[Tu Nombre]}
-\institute{LSTI2311: Bases de Datos}
+\subtitle{Gestión de Consultas y Medicamentos Recetados}
+\author{[Integrantes]}
+\institute{LSTI2311: Bases de Datos \\ Prof.\ [Profesor]}
 \date{\today}
 
-\newcommand{\captura}[1]{%
+\newcommand{\evidencia}[1]{%
   \begin{center}
-  \fbox{\parbox[c][3.4cm][c]{0.86\linewidth}{\centering [Captura de pantalla: #1]}}
+  \fbox{\parbox[c][2.8cm][c]{0.82\linewidth}{\centering\itshape [Evidencia: #1]}}
   \end{center}}
 
 \begin{document}
 
 % =====================================================================
-%  PORTADA (unico lugar con el logo de Tecmilenio)
+% 1. PORTADA (unico lugar con el logo de Tecmilenio)
 % =====================================================================
 \begin{frame}[plain]
   \begin{tikzpicture}[overlay,remember picture]
     \node[anchor=north east] at ([xshift=-0.9cm,yshift=-0.7cm]current page.north east)
       {\includegraphics[height=1.1cm]{../../../attachments/Tecmilenio Logo.png}};
   \end{tikzpicture}
-  \titlepage
+  \vspace{1.4cm}
+  \begin{center}
+    {\huge\bfseries Farmacia con Consultorio Médico}\\[0.5em]
+    {\large Gestión de Consultas y Medicamentos Recetados}\\[1.6em]
+    \rule{0.4\linewidth}{0.4pt}\\[1.0em]
+    {\normalsize [Integrantes]}\\[0.3em]
+    {\normalsize LSTI2311: Bases de Datos}\\[0.3em]
+    {\normalsize Prof.\ [Profesor]}\\[0.6em]
+    {\small \today}
+  \end{center}
 \end{frame}
 
 % =====================================================================
-%  AGENDA
-% =====================================================================
-\begin{frame}{Agenda}
-  \tableofcontents
-\end{frame}
-
-% =====================================================================
-%  (Exposicion oral - documento) ¿QUE EMPRESA REPRESENTAN?
+% 2. QUE EMPRESA REPRESENTAMOS
 % =====================================================================
 \section{La empresa}
 \begin{frame}{¿Qué empresa representamos?}
+  \textbf{Quiénes somos}
   \begin{itemize}
     \item Consultorio médico con farmacia asociada.
-    \item Atiende consultas, emite recetas y surte medicamentos en el mismo lugar.
-    \item Áreas involucradas: consultorio (médicos), farmacia (dispensación),
-          compras (proveedores) y administración.
+  \end{itemize}
+  \vspace{0.3em}
+  \textbf{Qué áreas intervienen}
+  \begin{itemize}
+    \item Consultorio (médicos), farmacia (dispensación), compras (proveedores) y administración.
+  \end{itemize}
+  \vspace{0.3em}
+  \textbf{Cómo se relacionan el consultorio y la farmacia}
+  \begin{itemize}
+    \item El médico consulta y emite la receta; la farmacia la surte y registra la venta.
   \end{itemize}
 \end{frame}
 
 % =====================================================================
-%  ¿CUAL ES SU PROBLEMATICA ACTUAL?  (rubrica: Investigacion y analisis)
+% 3. PROBLEMATICA ACTUAL
 % =====================================================================
 \section{Problemática actual}
-\begin{frame}{¿Cuál es su problemática actual?}
+\begin{frame}{¿Cuál es la problemática actual?}
+  \textbf{Situación actual}
   \begin{itemize}
-    \item Historiales clínicos en papel: se extravían y fragmentan la atención.
-    \item Inventario sin control: desabasto de fármacos clave y mermas por caducidad.
-    \item Recetas y ventas desvinculadas: no hay trazabilidad receta--venta.
-    \item Procesos manuales: reposición tardía y errores de dispensación.
+    \item Desconexión entre la farmacia y el consultorio.
+    \item Operan como dos negocios distintos: información y procesos separados.
+    \item Experiencia de usuario fragmentada: sin datos de fidelidad ni conocimiento de la conversión de recetas.
+  \end{itemize}
+  \textbf{Manejo de la información}
+  \begin{itemize}
+    \item La información se administra de forma arcaica.
+    \item Uso de papel; datos dispersos, no centralizados ni conectados para generar información estratégica.
+  \end{itemize}
+  \textbf{Principales problemas identificados}
+  \begin{itemize}
+    \item Ausencia de automatización.
+    \item Desabasto de medicamentos clave y mermas por caducidad no detectada.
+    \item Procesos manuales que retrasan la reposición y provocan errores de dispensación.
   \end{itemize}
 \end{frame}
 
 % =====================================================================
-%  ¿CUAL ES SU IMPACTO?
+% 4. IMPACTO
 % =====================================================================
 \section{Impacto}
-\begin{frame}{¿Cuál es su impacto?}
+\begin{frame}{¿Cuál es el impacto?}
+  \textbf{Impacto en los pacientes}
   \begin{itemize}
-    \item \textbf{Clínico:} riesgo para el paciente por alergias/interacciones no detectadas.
-    \item \textbf{Económico:} pérdidas por caducidad, desabasto y ventas no registradas.
-    \item \textbf{Operativo:} decisiones de compra sin datos y auditorías difíciles.
-    \item \textbf{Reputacional:} menor confianza del paciente en la atención.
+    \item Experiencias distintas entre consultorio y farmacia.
+    \item Creación de doble perfil.
+  \end{itemize}
+  \vspace{0.3em}
+  \textbf{Impacto en la atención}
+  \begin{itemize}
+    \item Atención lenta y fragmentada.
+  \end{itemize}
+  \vspace{0.3em}
+  \textbf{Impacto en la farmacia}
+  \begin{itemize}
+    \item Desconocimiento del rendimiento del negocio.
+    \item Pérdida de ventas.
+    \item Ausencia de competitividad.
   \end{itemize}
 \end{frame}
 
 % =====================================================================
-%  OBJETIVO DEL PROYECTO (SMART)  ->  RUBRICA criterio 1: Claridad del objetivo
+% 5. CAUSA RAIZ
 % =====================================================================
-\section{Objetivo del proyecto}
-\begin{frame}{Objetivo del proyecto (SMART)}
-  \begin{block}{Objetivo}
-    Implementar una base de datos relacional para el consultorio-farmacia que
-    centralice historial clínico, inventario y ventas, con validaciones
-    automáticas, reduciendo errores de dispensación y desabasto.
-  \end{block}
+\section{Causa raíz}
+\begin{frame}{¿Cuál es la causa raíz?}
+  \textbf{Falta de integración de la información}
   \begin{itemize}
-    \item \textbf{Específico:} historial, inventario y recetas en una sola base.
-    \item \textbf{Medible:} 20 tablas, 3 vistas, 3 SP y 2 triggers operativos.
-    \item \textbf{Alcanzable:} MySQL + acceso desde Java (JDBC).
-    \item \textbf{Relevante:} ataca las causas de riesgo clínico y pérdidas.
-    \item \textbf{Temporal:} entregable al cierre del proyecto final.
+    \item Consultorio y farmacia no comparten una misma fuente de datos.
+    \item Información dispersa y en papel: se duplica y no se conecta.
+  \end{itemize}
+  \vspace{0.3em}
+  \textbf{Procesos manuales}
+  \begin{itemize}
+    \item Operación dependiente de tareas manuales, sin conexión entre áreas.
+    \item No hay un flujo estandarizado de la información.
+  \end{itemize}
+  \vspace{0.3em}
+  \textbf{Falta de validaciones y controles}
+  \begin{itemize}
+    \item Sin reglas de negocio aplicadas de forma automática.
+    \item Sin control de inventario, caducidades ni trazabilidad receta--venta.
   \end{itemize}
 \end{frame}
 
 % =====================================================================
-%  ESTRATEGIA: causa raiz OPERATIVA antes de la tecnologia
+% 6. ESTRATEGIA A SEGUIR
 % =====================================================================
 \section{Estrategia}
-\begin{frame}{Estrategia: atacar la causa raíz operativa}
-  \textbf{Primero la operación, luego la tecnología.}
+\begin{frame}{¿Qué estrategia debemos seguir?}
   \begin{itemize}
-    \item Estandarizar el flujo: paciente $\rightarrow$ consulta $\rightarrow$ receta $\rightarrow$
-          surtido $\rightarrow$ venta $\rightarrow$ inventario $\rightarrow$ reposición.
-    \item Definir reglas de negocio: vigencia de cédula médica, control de
-          alergias/interacciones, stock mínimo y caducidad.
-    \item Después, llevar esas reglas a la base de datos como
-          restricciones, procedimientos y triggers.
+    \item \textbf{Entender las reglas del negocio:} qué se valida, qué se controla.
+    \item \textbf{Mapear el proceso actual:} de la consulta a la venta y la reposición.
+    \item \textbf{Estandarizar la operación:} un flujo único y ordenado.
+    \item \textbf{Centralizar la información:} una sola fuente de verdad.
+    \item \textbf{Automatizar los procesos:} validaciones y registros sin intervención manual.
   \end{itemize}
+  \vspace{0.3em}
+  \small\textit{Primero la operación, luego la tecnología.}
 \end{frame}
 
 % =====================================================================
-%  IMPORTANCIA DE... (documento)
+% 7. SOLUCION TECNOLOGICA - ER a PANTALLA COMPLETA
 % =====================================================================
-\begin{frame}{¿Cuál es la importancia de...?}
+\section{Solución tecnológica}
+\begin{frame}{¿Cuál es nuestra solución tecnológica?}
   \begin{itemize}
-    \item \textbf{Entender las reglas de negocio:} evita errores clínicos y define
-          qué debe validar el sistema.
-    \item \textbf{Mapear el flujo de información:} muestra qué datos se comparten
-          entre consultorio, farmacia y compras.
-    \item \textbf{Integrar operación y tecnología:} una sola fuente de verdad,
-          sin islas de información.
-    \item \textbf{Gestionar la ejecución de la estrategia:} vistas, SP y triggers
-          garantizan que las reglas se cumplan.
+    \item \textbf{Base de datos relacional en MySQL:} centraliza toda la información.
+    \item \textbf{Modelo Entidad-Relación:} 20 tablas con claves y relaciones definidas.
+    \item \textbf{Integración de consultorio y farmacia:} un solo sistema, sin islas de datos.
   \end{itemize}
+  \vspace{0.3em}
+  \small\textit{Evidencia: Modelo Entidad-Relación (siguiente diapositiva).}
 \end{frame}
 
-% =====================================================================
-%  MODELO ER a PANTALLA COMPLETA (solo)  -> Presentacion y comunicacion
-% =====================================================================
-\section{Modelo Entidad-Relación}
 {%
 \setbeamertemplate{footline}{}%
 \begin{frame}[plain]
@@ -185,118 +225,125 @@
 \end{frame}
 }
 
-\begin{frame}{Modelo Entidad-Relación: estructura}
-  \textbf{20 tablas} organizadas en:
+% =====================================================================
+% 8. COMO SE GESTIONAN LOS DATOS
+% =====================================================================
+\section{Gestión de los datos}
+\begin{frame}{¿Cómo se gestionan los datos?}
+  \textbf{Flujo de la información}
   \begin{itemize}
-    \item Personas: Empleados, Médicos, Pacientes.
-    \item Clínico: Historiales, Condiciones, Consultas, Recetas.
-    \item Farmacia: Medicamentos, Lotes, Inventario.
-    \item Comercial: Ventas, Proveedores, Órdenes de Compra.
-    \item Auditoría: \texttt{Auditoria\_Inventario} (LOG).
+    \item Paciente $\rightarrow$ consulta $\rightarrow$ receta $\rightarrow$ surtido $\rightarrow$ venta $\rightarrow$ inventario $\rightarrow$ reposición.
+  \end{itemize}
+  \vspace{0.2em}
+  \textbf{Información clínica}
+  \begin{itemize}
+    \item Historial, diagnósticos, alergias y contraindicaciones del paciente.
+  \end{itemize}
+  \textbf{Recetas y medicamentos}
+  \begin{itemize}
+    \item Recetas vinculadas a consulta, medicamento, dosis y duración.
+  \end{itemize}
+  \textbf{Inventario y ventas}
+  \begin{itemize}
+    \item Stock por lote, caducidades, ventas y su vínculo con la receta.
+  \end{itemize}
+\end{frame}
+
+% =====================================================================
+% 9. COMO AUTOMATIZAMOS LOS PROCESOS
+% =====================================================================
+\section{Automatización}
+\begin{frame}{¿Cómo automatizamos los procesos?}
+  \begin{itemize}
+    \item \textbf{Vistas:} historial clínico, inventario con alertas y medicamentos más recetados/surtidos.
+    \item \textbf{Stored Procedures:} registrar consulta/receta, surtir receta y generar reposición.
+    \item \textbf{Triggers:} validan recetas y disparan la auditoría de inventario.
+    \item \textbf{LOG de auditoría:} tabla \texttt{Auditoria\_Inventario} con cada movimiento de stock.
+  \end{itemize}
+  \evidencia{resultados reales de la BD (vistas / SP / triggers)}
+\end{frame}
+
+% =====================================================================
+% 10. COMO APLICAMOS LAS REGLAS DE NEGOCIO
+% =====================================================================
+\section{Reglas de negocio}
+\begin{frame}{¿Cómo aplicamos las reglas de negocio?}
+  \begin{itemize}
+    \item \textbf{Validación de pacientes y médicos:} paciente activo y médico con cédula vigente.
+    \item \textbf{Alergias y contraindicaciones:} se verifican contra los medicamentos recetados.
+    \item \textbf{Interacciones medicamentosas:} se bloquean combinaciones peligrosas.
+    \item \textbf{Validación de recetas:} dosis, duración y vigencia dentro de rango.
+  \end{itemize}
+  \evidencia{mensaje real de validación/error}
+\end{frame}
+
+% =====================================================================
+% 11. COMO CONTROLAMOS EL INVENTARIO
+% =====================================================================
+\section{Control de inventario}
+\begin{frame}{¿Cómo controlamos el inventario?}
+  \begin{itemize}
+    \item \textbf{Stock de medicamentos:} estado suficiente / bajo / crítico / agotado.
+    \item \textbf{Lotes y caducidades:} se dispensa el lote no vencido más próximo a caducar.
+    \item \textbf{Reposición:} órdenes automáticas al llegar al stock mínimo.
+    \item \textbf{Auditoría de movimientos:} cada cambio de stock queda registrado.
+  \end{itemize}
+  \evidencia{inventario + LOG de auditoría}
+\end{frame}
+
+% =====================================================================
+% 12. COMO INTEGRAMOS OPERACION Y TECNOLOGIA
+% =====================================================================
+\section{Integración operación--tecnología}
+\begin{frame}{¿Cómo integramos operación y tecnología?}
+  \begin{itemize}
+    \item \textbf{Proceso operativo:} el flujo real del negocio, estandarizado.
+    \item \textbf{Reglas de negocio:} llevadas a restricciones, SP y triggers.
+    \item \textbf{Base de datos:} MySQL como fuente única de verdad.
+    \item \textbf{Conexión Java--MySQL:} acceso a los datos desde la aplicación (JDBC).
+  \end{itemize}
+  \evidencia{conexión y consulta desde Java (\texttt{App.java})}
+\end{frame}
+
+% =====================================================================
+% 13. IMPORTANCIA DE UNA ESTRATEGIA INTEGRAL
+% =====================================================================
+\section{Estrategia integral}
+\begin{frame}{¿Por qué es importante una estrategia integral?}
+  \begin{itemize}
+    \item \textbf{Entender las reglas de negocio:} define qué debe validar el sistema.
+    \item \textbf{Mapear correctamente el flujo de información:} evita islas de datos.
+    \item \textbf{Integrar operación y tecnología:} una sola fuente de verdad.
+    \item \textbf{Gestionar la correcta ejecución:} vistas, SP y triggers hacen cumplir las reglas.
   \end{itemize}
   \vspace{0.4em}
-  Claves primarias y foráneas por tabla; convención de IDs con prefijo
-  (p.\,ej. \texttt{PAC-000001}). Normalización 1FN--3FN.
+  \small\textit{Responde directamente a los cuatro puntos de la exposición oral.}
 \end{frame}
 
 % =====================================================================
-%  ¿COMO AYUDARIA LA BD? - GESTION DE DATOS  (Vistas)
-% =====================================================================
-\section{¿Cómo ayuda la BD? — Gestión de datos}
-\begin{frame}{¿Cómo ayuda la BD en la gestión de los datos? (Vistas)}
-  \begin{itemize}
-    \item \textbf{Vista 1 --- Historial clínico completo del paciente.}
-      Consolida consultas, diagnósticos, recetas, dosis y alergias.
-    \item \textbf{Vista 2 --- Inventario con alertas de stock mínimo.}
-      Estado (suficiente/bajo/crítico/agotado), lote y caducidad más próxima.
-    \item \textbf{Vista 3 --- Medicamentos más recetados y surtidos.}
-      Conversión receta--venta y tendencia de consumo para decidir compras.
-  \end{itemize}
-  \captura{resultado de una vista en MySQL}
-\end{frame}
-
-% =====================================================================
-%  ¿COMO AYUDARIA LA BD? - AUTOMATIZACION (Stored Procedures)
-% =====================================================================
-\section{¿Cómo ayuda la BD? — Automatización}
-\begin{frame}{Automatización de procesos: Stored Procedures}
-  \begin{itemize}
-    \item \textbf{SP1 --- Registrar consulta y emitir receta.}
-      Valida paciente activo, médico con cédula vigente y alergias;
-      inserta consulta, receta y detalle.
-    \item \textbf{SP2 --- Surtir receta y actualizar inventario.}
-      Verifica vigencia, asigna lote no vencido, registra la venta y
-      descuenta stock automáticamente.
-    \item \textbf{SP3 --- Generar órdenes de reposición por stock mínimo.}
-      Evalúa stock $\leq$ mínimo y crea la orden sin duplicados.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Automatización y trazabilidad: Triggers y LOG}
-  \begin{itemize}
-    \item \textbf{Trigger 1 --- \texttt{BEFORE INSERT} en \texttt{Detalles\_Receta}.}
-      Bloquea recetas con contraindicaciones, interacciones o datos inválidos.
-    \item \textbf{Trigger 2 --- \texttt{AFTER UPDATE} en \texttt{Inventario}.}
-      Registra cada movimiento de stock en la tabla LOG
-      \texttt{Auditoria\_Inventario} para trazabilidad total.
-  \end{itemize}
-  \vspace{0.3em}
-  \small\textit{La automatización aplica las reglas de negocio sin intervención manual.}
-\end{frame}
-
-% =====================================================================
-%  CONEXION JAVA (JDBC) - datos en uso
-% =====================================================================
-\section{Conexión Java (JDBC)}
-\begin{frame}{Los datos en uso: conexión Java (JDBC)}
-  \begin{itemize}
-    \item \texttt{App.java} conecta a MySQL (instancia gestionada en Aiven, SSL).
-    \item Credenciales fuera del código (variables de entorno seguras).
-    \item Consulta \texttt{Pacientes} y despliega el Dataset resultante.
-  \end{itemize}
-  \captura{salida de la ejecución de \texttt{App.java}}
-\end{frame}
-
-% =====================================================================
-%  VALIDACION (documento pide al menos 3 ejemplos de SP/Trigger)
-% =====================================================================
-\section{Validación}
-\begin{frame}{Validación: 3 ejemplos de SP y Triggers}
-  \begin{enumerate}
-    \item \textbf{SP1:} receta a paciente con alergia $\Rightarrow$ el sistema la
-          rechaza con mensaje de riesgo clínico.
-    \item \textbf{SP2:} surtir receta vigente $\Rightarrow$ se registra la venta y
-          disminuye el stock.
-    \item \textbf{Trigger 2:} tras el surtido $\Rightarrow$ registro automático en
-          \texttt{Auditoria\_Inventario}.
-  \end{enumerate}
-  \captura{ejecución de los 3 ejemplos con su resultado}
-\end{frame}
-
-% =====================================================================
-%  BENEFICIOS de la nueva estrategia y solucion (documento)
+% 14. BENEFICIOS
 % =====================================================================
 \section{Beneficios}
-\begin{frame}{¿Qué beneficios se obtendrán?}
+\begin{frame}{¿Qué beneficios obtenemos?}
   \begin{itemize}
-    \item \textbf{Atención más segura:} validaciones clínicas automáticas.
-    \item \textbf{Menos pérdidas:} control de inventario, caducidades y reposición.
-    \item \textbf{Trazabilidad:} vínculo receta--venta y auditoría de inventario.
-    \item \textbf{Mejores decisiones:} reportes de consumo para compras.
-    \item \textbf{Escalabilidad:} base para un sistema de gestión completo.
+    \item \textbf{Seguridad del paciente:} validaciones clínicas automáticas.
+    \item \textbf{Eficiencia operativa:} procesos estandarizados y más rápidos.
+    \item \textbf{Control del inventario:} menos desabasto y menos mermas.
+    \item \textbf{Automatización:} menos errores manuales.
+    \item \textbf{Información para la toma de decisiones:} reportes de consumo y conversión.
   \end{itemize}
 \end{frame}
 
 % =====================================================================
-%  CONCLUSION
+% 15. CONCLUSION
 % =====================================================================
 \section{Conclusión}
 \begin{frame}{Conclusión}
   \begin{itemize}
-    \item El problema operativo se atacó antes de la solución tecnológica.
-    \item La base de datos integra historial, inventario y ventas con reglas
-          de negocio automatizadas.
-    \item Resultado: atención más segura, menos pérdidas y trazabilidad total.
+    \item \textbf{Problema identificado:} consultorio y farmacia desconectados, información arcaica.
+    \item \textbf{Estrategia aplicada:} estandarizar, centralizar y automatizar la operación.
+    \item \textbf{Solución implementada:} base de datos relacional con vistas, SP y triggers.
+    \item \textbf{Resultado obtenido:} atención más segura, menos pérdidas y trazabilidad total.
   \end{itemize}
 \end{frame}
 
